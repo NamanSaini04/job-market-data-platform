@@ -1,0 +1,17 @@
+# secrets
+.env
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+
+# pipeline data (raw files are rebuilt by the pipeline, never committed)
+data/
+
+# editors / OS
+.vscode/
+.idea/
+.DS_Store

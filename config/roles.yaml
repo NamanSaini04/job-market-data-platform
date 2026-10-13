@@ -1,0 +1,32 @@
+# Role families the platform tracks.
+# To track a new role later, add a block here. No code changes needed.
+#
+# search_terms   -> keywords sent to Reed / Adzuna search
+# title_patterns -> lowercase phrases used to classify a job title into this family
+#                   (first matching family wins, so order matters: specific before general)
+
+role_families:
+  - name: Analytics Engineer
+    search_terms: ["analytics engineer"]
+    title_patterns: ["analytics engineer"]
+
+  - name: ML Engineer
+    search_terms: ["machine learning engineer", "mlops engineer"]
+    title_patterns: ["machine learning engineer", "ml engineer", "mlops", "ml ops"]
+
+  - name: AI Engineer
+    search_terms: ["ai engineer"]
+    title_patterns: ["ai engineer", "llm engineer", "applied ai engineer", "genai engineer"]
+
+  - name: Data Engineer
+    search_terms: ["data engineer"]
+    title_patterns: ["data engineer", "data platform engineer", "etl developer"]
+
+  - name: Data Scientist
+    search_terms: ["data scientist"]
+    title_patterns: ["data scientist", "machine learning scientist", "ml scientist"]
+
+  - name: Data Analyst
+    search_terms: ["data analyst"]
+    title_patterns: ["data analyst", "bi analyst", "business intelligence analyst",
+                     "insight analyst", "insights analyst", "analytics analyst", "reporting analyst"]

@@ -1,0 +1,54 @@
+# Company career boards collected daily (public job-board APIs, no key needed).
+#
+# Checked live on 13 Oct 2026. Numbers in comments are from that day:
+#   uk = jobs with a UK location, uk_data = UK jobs matching a role family in roles.yaml
+#
+# Inclusion rule: a board is collected if it had >= 1 UK data role on the check date.
+# One day is a noisy sample. Re-run scripts/verify_ats_slugs.py monthly and re-apply the rule.
+#
+# We collect the WHOLE board (not only UK data roles), because a job only counts as
+# "closed" when it disappears from the full board. UK/role filtering happens in dbt.
+
+companies:
+  # --- Greenhouse: https://boards-api.greenhouse.io/v1/boards/{slug}/jobs?content=true ---
+  - {company: Monzo,       ats: greenhouse, slug: monzo,      status: verified}  # uk=53  uk_data=11
+  - {company: Deliveroo,   ats: greenhouse, slug: deliveroo,  status: verified}  # uk=143 uk_data=9
+  - {company: Intercom,    ats: greenhouse, slug: intercom,   status: verified}  # uk=28  uk_data=8
+  - {company: GitLab,      ats: greenhouse, slug: gitlab,     status: verified}  # uk=48  uk_data=3
+  - {company: GoCardless,  ats: greenhouse, slug: gocardless, status: verified}  # uk=7   uk_data=1
+  - {company: Elastic,     ats: greenhouse, slug: elastic,    status: verified}  # uk=23  uk_data=1
+
+  # --- Ashby: https://api.ashbyhq.com/posting-api/job-board/{slug}?includeCompensation=true ---
+  - {company: Faculty,     ats: ashby, slug: faculty,     status: verified}  # uk=81 uk_data=29
+  - {company: Lendable,    ats: ashby, slug: lendable,    status: verified}  # uk=63 uk_data=8
+  - {company: Wayve,       ats: ashby, slug: wayve,       status: verified}  # uk=55 uk_data=7
+  - {company: OpenAI,      ats: ashby, slug: openai,      status: verified}  # uk=33 uk_data=5
+  - {company: ElevenLabs,  ats: ashby, slug: elevenlabs,  status: verified}  # uk=51 uk_data=4
+  - {company: Marshmallow, ats: ashby, slug: marshmallow, status: verified}  # uk=11 uk_data=4
+  - {company: Synthesia,   ats: ashby, slug: synthesia,   status: verified}  # uk=29 uk_data=1
+  - {company: Multiverse,  ats: ashby, slug: multiverse,  status: verified}  # uk=26 uk_data=1
+  - {company: Granola,     ats: ashby, slug: granola,     status: verified}  # uk=13 uk_data=1
+  - {company: Causaly,     ats: ashby, slug: causaly,     status: verified}  # uk=4  uk_data=1
+
+  # --- Lever: https://api.lever.co/v0/postings/{slug}?mode=json ---
+  - {company: Spotify,     ats: lever, slug: spotify,  status: verified}  # uk=37 uk_data=6
+  - {company: Zopa,        ats: lever, slug: zopa,     status: verified}  # uk=34 uk_data=2
+  - {company: Palantir,    ats: lever, slug: palantir, status: verified}  # uk=43 uk_data=1
+
+# Total on 13 Oct: 19 boards, ~103 UK data roles. Faculty alone is ~28% of that.
+
+# Board exists but 0 UK data roles on 13 Oct (re-check monthly):
+#   greenhouse: tide, isomorphiclabs, databricks, cloudflare, datadog, stripe, twilio
+#   ashby:      encord, attio, quantexa, tractable, lindus, primer
+#   lever:      farfetch, kraken (empty board)
+#
+# Not found on Greenhouse, Ashby or Lever (likely Workday or another ATS, out of scope):
+#   deepmind, polyai, cleo, thoughtmachine, skyscanner, octopusenergy, checkout, depop,
+#   onfido, ocado, trainline, starlingbank, oaknorth, gousto, bumble, clearscore, paddle
+#
+# Dropped earlier (almost no UK roles): wise, mongodb, airtable
+#
+# How to find a slug: open a job on the company's careers page and read the URL.
+#   job-boards.greenhouse.io/<slug>  -> greenhouse
+#   jobs.ashbyhq.com/<slug>          -> ashby
+#   jobs.lever.co/<slug>             -> lever

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  macOS scheduler entry: runs the pipeline every day at 09:30 local time.
+
+  Why launchd and not cron: if the Mac is ASLEEP at 09:30, launchd runs the job
+  when it wakes up. cron would just skip that day. (If the Mac is switched OFF,
+  both miss it; the day becomes a gap in the data, recorded by ops.pipeline_run.)
+
+  Install, test and remove: see docs/02_ingestion.md, section "Schedule it".
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.namansaini.jobmarket.daily</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/Users/apple/Projects/job-market-data-platform/scripts/run_daily.sh</string>
+  </array>
+
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>9</integer>
+    <key>Minute</key>
+    <integer>30</integer>
+  </dict>
+
+  <!-- Only catches errors from launchd itself; the pipeline logs to data/logs/ -->
+  <key>StandardErrorPath</key>
+  <string>/Users/apple/Projects/job-market-data-platform/data/logs/launchd.err</string>
+</dict>
+</plist>

@@ -4,38 +4,58 @@ A daily, automated pipeline that collects UK data and AI job postings from appro
 keeps every raw observation, tracks each posting over time, and models the data with dbt
 on PostgreSQL for analysis of skills, salaries, locations and hiring trends.
 
-> Status: **Phase 1, requirements and source profiling.** Pipeline not built yet.
+> **Status: Phase 2.** Daily collection from 19 company job boards into a PostgreSQL raw layer.
+> Reed (UK job board) is next. dbt models and dashboard follow.
+
+## Architecture (so far)
+
+```
+Company job boards (Greenhouse, Lever, Ashby)
+        |  daily, launchd
+        v
+Python collector ──> raw JSON files (gzip, immutable)
+        |
+        v
+PostgreSQL (Docker)
+  raw.job_observation   one row per job per day   -> history: first/last seen
+  raw.job_payload       full JSON per content version -> change detection
+  raw.rejected_record   failed validation, kept for inspection
+  ops.pipeline_run      run log: status, counts, timing
+  ops.source_run        per-board result, so a failed fetch is never read as "jobs closed"
+```
+
+## Key design decisions
+- **Profile sources before designing.** 73% of Reed postings come from recruitment agencies, and keyword search returns unrelated titles more than half the time. Both shaped the design ([findings](docs/01_requirements_and_architecture.md)).
+- **Raw layer is append-only JSONB.** Interpretation happens later in dbt, so cleaning rules can change without losing data.
+- **Idempotent loads.** Re-running a day adds nothing.
+- **Files first, database second.** A database outage loses no data; the raw layer can be rebuilt from files (tested).
+- **Failure isolation.** One failing board or bad record never stops the run.
 
 ## Sources
-| Source | Access |
-|---|---|
-| Greenhouse / Lever / Ashby public job boards | No key |
-| Reed Jobseeker API | Free key |
-| Adzuna API | Deferred to v2 |
+| Source | Access | Status |
+|---|---|---|
+| Greenhouse / Lever / Ashby public job boards (19 companies) | No key | Collected daily |
+| Reed Jobseeker API | Free key | Profiled, collector next |
+| Adzuna API | Free key | Deferred |
 
-## Project layout (so far)
-```
-config/
-  ats_companies.yaml   company career boards to collect
-  roles.yaml           role families + title patterns (add roles here)
-docs/
-  01_requirements_and_architecture.md
-scripts/
-  check_sources.py     profiles each source, can save test fixtures
-  verify_ats_slugs.py  checks every company board in the config
-tests/
-  test_phase1.py
-```
-
-## Run Phase 1
+## Run it
 ```bash
-python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
+python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env        # then add your Reed key
-pytest -q                   # config + helper tests, no network
-python scripts/verify_ats_slugs.py
-python scripts/check_sources.py --save
+cp .env.example .env              # add Reed key and a Postgres password
+docker compose up -d              # Postgres on localhost:5433
+python -m ingestion.db migrate
+pytest -q                         # 31 tests, incl. integration tests on real Postgres
+python -m ingestion.run_ats       # collect all boards
 ```
+Full setup, verification queries and scheduling: [docs/02_ingestion.md](docs/02_ingestion.md).
 
-## Design
-See [docs/01_requirements_and_architecture.md](docs/01_requirements_and_architecture.md).
+## Project layout
+```
+config/            boards to collect, role families
+database/migrations/  numbered SQL schema changes
+docs/              requirements, findings, phase guides
+ingestion/         collector: extractors, raw files, loader, run log
+scripts/           source profiling, daily runner, launchd schedule
+tests/             unit + integration tests, real API sample responses
+```

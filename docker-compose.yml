@@ -1,0 +1,28 @@
+# Local infrastructure. Phase 2: just the database.
+# Start:  docker compose up -d
+# Stop:   docker compose down          (data is kept in the named volume)
+# Wipe:   docker compose down -v       (DELETES ALL DATA - only if you mean it)
+
+services:
+  db:
+    image: postgres:16
+    container_name: jobmarket-db
+    restart: unless-stopped          # comes back after Docker Desktop restarts
+    environment:
+      POSTGRES_USER: ${PGUSER:-jobs}
+      POSTGRES_PASSWORD: ${PGPASSWORD:?Set PGPASSWORD in .env}
+      POSTGRES_DB: ${PGDATABASE:-jobmarket}
+    ports:
+      # Host port 5433, not 5432, so it can't clash with a Postgres
+      # already installed on the Mac (you have pgAdmin, so you may have one).
+      - "${PGPORT:-5433}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PGUSER:-jobs} -d ${PGDATABASE:-jobmarket}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  pgdata:

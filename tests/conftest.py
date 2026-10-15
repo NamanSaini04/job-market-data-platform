@@ -44,6 +44,10 @@ def settings(tmp_path):
         "  - {company: Lever Co, ats: lever, slug: leverco, status: verified}\n"
         "  - {company: Ashby Co, ats: ashby, slug: ashbyco, status: verified}\n"
         "  - {company: Not Yet, ats: ashby, slug: notyet, status: unverified}\n")
+    (cfg / "roles.yaml").write_text(
+        "role_families:\n"
+        "  - {name: Data Engineer, search_terms: [data engineer], title_patterns: [data engineer]}\n"
+        "  - {name: Data Analyst, search_terms: [data analyst], title_patterns: [data analyst]}\n")
     return replace(get_settings(), data_dir=tmp_path / "data", config_dir=cfg,
                    pg_database=TEST_DB, pause_between_requests_s=0)
 

@@ -30,9 +30,13 @@ for _ in $(seq 1 30); do
 done
 
 # 3. Migrations (does nothing if already up to date), then collect.
+#    Both collectors always run: one failing must not stop the other.
 .venv/bin/python -m ingestion.db migrate
 .venv/bin/python -m ingestion.run_ats
-status=$?
+ats=$?
+.venv/bin/python -m ingestion.run_reed
+reed=$?
+status=$(( ats != 0 || reed != 0 ))
 
-echo "=== $(date '+%F %T') end exit=$status"
+echo "=== $(date '+%F %T') end exit=$status (boards=$ats reed=$reed)"
 exit $status

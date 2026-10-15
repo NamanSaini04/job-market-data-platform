@@ -22,6 +22,12 @@ class Settings:
     config_dir: Path = ROOT / "config"
     migrations_dir: Path = ROOT / "database" / "migrations"
 
+    reed_api_key: str = os.getenv("REED_API_KEY", "")
+    # Detail calls are 1 per job. Capped per day so the first big backlog is
+    # spread over several days instead of hammering Reed (no published rate limit).
+    reed_max_details: int = int(os.getenv("REED_MAX_DETAILS", "800"))
+    reed_max_pages_per_query: int = int(os.getenv("REED_MAX_PAGES_PER_QUERY", "100"))
+
     http_timeout_s: int = 30
     pause_between_requests_s: float = float(os.getenv("PAUSE_BETWEEN_REQUESTS_S", "1.0"))
     user_agent: str = (

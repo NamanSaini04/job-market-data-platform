@@ -17,8 +17,15 @@ from psycopg.types.json import Jsonb
 from ingestion.extractors.ats import RawRecord, Rejected
 
 
-def payload_hash(payload: dict) -> str:
-    """SHA-256 of canonical JSON: key order and whitespace don't change the hash."""
+def payload_hash(payload: dict, ignore: tuple[str, ...] = ()) -> str:
+    """SHA-256 of canonical JSON: key order and whitespace don't change the hash.
+
+    `ignore` lists top-level fields that change constantly without the job
+    changing (e.g. Reed's application count). They are still stored, just not
+    counted as a content change.
+    """
+    if ignore:
+        payload = {k: v for k, v in payload.items() if k not in ignore}
     canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
@@ -97,8 +104,16 @@ def finish_run(conn: psycopg.Connection, run_id: UUID, *, status: str, duplicate
 # ---------- data ----------
 
 def load_board(conn: psycopg.Connection, run_id: UUID, observed: date,
-               records: list[RawRecord], rejected: list[Rejected]) -> dict:
-    """Load one board in ONE transaction: the whole board lands, or none of it does."""
+               records: list[RawRecord], rejected: list[Rejected], *,
+               ignore_fields: tuple[str, ...] = (), observe: bool = True,
+               search_hit: tuple[str, str] | None = None) -> dict:
+    """Load one board (or one Reed search page) in ONE transaction: all of it or none.
+
+    observe=False    store content only, no daily observation (Reed detail calls:
+                     fetched once per job, not a daily snapshot).
+    search_hit       (search_term, posted_by): also record which Reed search found
+                     each job (raw.reed_search_hit).
+    """
     stats = {"loaded": 0, "duplicate": 0, "new_versions": 0, "rejected": len(rejected)}
     extra_rejects: list[Rejected] = []
 
@@ -108,22 +123,31 @@ def load_board(conn: psycopg.Connection, run_id: UUID, observed: date,
                 extra_rejects.append(Rejected(rec.source, rec.board,
                                               "contains NUL character", None))
                 continue
-            h = payload_hash(rec.payload)
+            h = payload_hash(rec.payload, ignore_fields)
             cur.execute(
                 """INSERT INTO raw.job_payload
                      (source, board, source_job_id, payload_hash, payload, first_seen_run)
                    VALUES (%s,%s,%s,%s,%s,%s) ON CONFLICT DO NOTHING""",
                 (rec.source, rec.board, rec.source_job_id, h, Jsonb(rec.payload), run_id))
             stats["new_versions"] += cur.rowcount
-            cur.execute(
-                """INSERT INTO raw.job_observation
-                     (source, board, source_job_id, observed_date, payload_hash, run_id)
-                   VALUES (%s,%s,%s,%s,%s,%s) ON CONFLICT DO NOTHING""",
-                (rec.source, rec.board, rec.source_job_id, observed, h, run_id))
-            if cur.rowcount:
-                stats["loaded"] += 1
+            if observe:
+                cur.execute(
+                    """INSERT INTO raw.job_observation
+                         (source, board, source_job_id, observed_date, payload_hash, run_id)
+                       VALUES (%s,%s,%s,%s,%s,%s) ON CONFLICT DO NOTHING""",
+                    (rec.source, rec.board, rec.source_job_id, observed, h, run_id))
+                if cur.rowcount:
+                    stats["loaded"] += 1
+                else:
+                    stats["duplicate"] += 1   # already seen today (re-run, or another search)
             else:
-                stats["duplicate"] += 1
+                stats["loaded"] += 1
+            if search_hit:
+                cur.execute(
+                    """INSERT INTO raw.reed_search_hit
+                         (source_job_id, observed_date, search_term, posted_by, run_id)
+                       VALUES (%s,%s,%s,%s,%s) ON CONFLICT DO NOTHING""",
+                    (rec.source_job_id, observed, search_hit[0], search_hit[1], run_id))
 
         for rej in rejected + extra_rejects:
             payload = None if rej.payload is None or _has_nul(rej.payload) else Jsonb(rej.payload)

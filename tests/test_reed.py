@@ -86,6 +86,8 @@ def test_pages_through_everything_and_tags_agency(db, settings):
                            "GROUP BY posted_by").fetchall())
     assert tags == {"direct": 280, "agency": 60}
     assert db.execute("SELECT status FROM ops.source_run WHERE board='search'").fetchone() == ("success",)
+    # run totals must not double-count the 'search' summary row (bug fixed in migration 003)
+    assert db.execute("SELECT records_fetched FROM ops.pipeline_run").fetchone() == (340,)
 
 
 def test_job_found_by_two_searches_is_observed_once_with_two_hits(db, settings):
@@ -180,3 +182,13 @@ def test_database_outage_then_reload_restores_reed_search(db, settings):
 def test_missing_api_key_fails_clearly(settings):
     s = run_reed.run(replace(settings, reed_api_key=""))
     assert s["status"] == "failed" and s["error"] == "REED_API_KEY missing"
+
+
+def test_migration_003_repairs_doubled_totals_from_before_the_fix(db, settings):
+    from ingestion.db import migrate
+    run_reed.run(settings, fetch=FakeReed(market()), conn=db, max_details=0)
+    db.execute("UPDATE ops.pipeline_run SET records_fetched = 680")          # the old bug
+    db.execute("DELETE FROM ops.schema_migration WHERE version = '003_fix_reed_run_totals.sql'")
+    db.commit()
+    assert migrate(db, settings.migrations_dir) == ["003_fix_reed_run_totals.sql"]
+    assert db.execute("SELECT records_fetched FROM ops.pipeline_run").fetchone() == (340,)

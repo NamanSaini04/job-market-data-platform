@@ -95,7 +95,11 @@ def finish_run(conn: psycopg.Connection, run_id: UUID, *, status: str, duplicate
                         coalesce(sum(records_fetched), 0)  AS fetched,
                         coalesce(sum(records_loaded), 0)   AS loaded,
                         coalesce(sum(records_rejected), 0) AS rejected
-                   FROM ops.source_run WHERE run_id = %s) s
+                   FROM ops.source_run
+                  WHERE run_id = %s
+                    -- Reed's 'search' row is a summary of its 14 query rows: counting it
+                    -- too would double the totals (bug found by health_check.sql, fixed in 003)
+                    AND NOT (source = 'reed' AND board = 'search')) s
            WHERE r.run_id = %s""",
         (status, duplicate, new_versions, (error or "")[:500] or None, run_id, run_id))
     conn.commit()

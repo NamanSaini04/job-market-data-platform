@@ -30,3 +30,21 @@ role_families:
     search_terms: ["data analyst"]
     title_patterns: ["data analyst", "bi analyst", "business intelligence analyst",
                      "insight analyst", "insights analyst", "analytics analyst", "reporting analyst"]
+
+  # Added 18 Oct 2026. Evidence: health check on 17 Oct found real data roles the
+  # filter rejected (Data Architect, Head of Data, BI Developer, Analytics Manager...).
+  # Deliberately NOT added: "data manager" (on Reed often clinical/school admin),
+  # "data science" and "ai developer" (would admit suspected training-course adverts,
+  # e.g. 90x "Data Science Trainee" from one advertiser).
+  - name: BI Developer
+    search_terms: ["bi developer"]
+    title_patterns: ["bi developer", "business intelligence developer", "power bi"]
+
+  - name: Data Architect
+    search_terms: ["data architect"]
+    title_patterns: ["data architect"]
+
+  - name: Data Leadership
+    search_terms: ["head of data"]
+    title_patterns: ["head of data", "director of data", "chief data officer", "data lead",
+                     "head of analytics", "analytics manager", "analytics lead"]

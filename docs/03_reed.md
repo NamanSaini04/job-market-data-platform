@@ -82,7 +82,7 @@ Expect `applied: 002_reed_search_hit.sql`.
 ```bash
 pytest -q
 ```
-Expect `47 passed`, **0 skipped**.
+Expect `48 passed`, **0 skipped**.
 
 **3. Small real run first** (all searches, only 20 detail calls)
 ```bash
@@ -131,7 +131,7 @@ No new schedule to install.
 
 ## 5. Completion criteria
 
-- [ ] Migration 002 applied; `pytest -q` = 47 passed, 0 skipped
+- [ ] Migrations 002 and 003 applied; `pytest -q` = 48 passed, 0 skipped
 - [ ] Small run: `status=success`, all 14 searches `success`, `search` row `success`
 - [ ] Direct/agency split close to Phase 1 (~26% / ~74%)
 - [ ] 3 consecutive automatic daily runs with Reed included
@@ -155,3 +155,36 @@ No new schedule to install.
   then stop for the day and record it. Never hammer.
 - *"What's a volatile field and why does it matter?"* A field that changes without the
   entity changing. Hashing it creates fake change history.
+
+## 8. Bug found after release (17 Oct 2026)
+
+`scripts/health_check.sql` showed Reed run totals in `ops.pipeline_run` were **doubled**:
+the `search` summary row was summed together with the 14 query rows it summarises.
+- Fix: `loader.finish_run` excludes Reed's `search` summary row.
+- Data repair: migration `003_fix_reed_run_totals.sql` recomputes the stored totals.
+- Guard: `test_pages_through_everything_and_tags_agency` now asserts the total, so the bug can't return silently.
+
+Lesson: a summary row stored next to its detail rows will be double-counted by the next
+person who writes `SUM(...)`. Either keep summaries out of detail tables, or exclude them
+explicitly everywhere, with a test.
+
+## 9. Role filter widened (18 Oct 2026)
+
+Health check section 4 plus a keyword scan of rejected titles (17 Oct, 7,086 Reed jobs) showed
+real data roles being rejected. Added three families to `config/roles.yaml`: **BI Developer**,
+**Data Architect**, **Data Leadership** (head/director of data, analytics manager...).
+
+Tested on the 17 Oct raw files before going live:
+- Matched jobs: 867 -> 976 (+109). ~105 are clearly data roles.
+- ~4 false positives ("Finance Business Partner (Power BI dashboards)"): "power bi" matches roles
+  that only mention the tool. Accepted: a few wasted detail calls; dbt classification can drop them.
+- Suspected training-course adverts admitted: **0**. A test now guards this
+  (`test_suspected_training_course_titles_do_not_match_any_role`).
+
+Deliberately not added: "data manager" (clinical/school admin on Reed), "data science" and
+"ai developer" (would admit 109 suspected course adverts from IT Career Switch, ITOL Recruit and others).
+Those advertisers are not yet blocked or flagged: decision pending a manual check of one advert.
+
+New search terms add 6 Reed queries (3 terms x direct/agency): roughly 20-40 extra calls a day.
+Older live jobs matching the new patterns get their detail automatically: the queue is derived from
+the database, so no backfill script was needed.

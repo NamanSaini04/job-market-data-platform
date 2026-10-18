@@ -43,12 +43,22 @@ def test_no_duplicate_boards():
 
 # ---------- config: roles.yaml ----------
 
-def test_six_starting_role_families():
+def test_six_starting_role_families_are_still_tracked():
     names = [f["name"] for f in load("roles.yaml")["role_families"]]
-    assert set(names) == {
+    assert {
         "Data Analyst", "Data Engineer", "Data Scientist",
         "ML Engineer", "AI Engineer", "Analytics Engineer",
-    }
+    } <= set(names)
+    assert len(names) == len(set(names)), "duplicate family name"
+
+
+def test_suspected_training_course_titles_do_not_match_any_role():
+    # Evidence 17 Oct 2026: these titles came from suspected course advertisers.
+    # Widening patterns must never let them in by accident.
+    patterns = [p for f in load("roles.yaml")["role_families"] for p in f["title_patterns"]]
+    for title in ["Data Science Trainee", "Junior AI Developer", "Trainee AI Programmer",
+                  "Entry Level Grad Scheme"]:
+        assert not any(p in title.lower() for p in patterns), title
 
 
 def test_title_patterns_are_lowercase_and_not_empty():

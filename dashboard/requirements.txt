@@ -1,0 +1,4 @@
+# Streamlit Community Cloud installs this file (the one next to app.py).
+streamlit==1.66.0
+pandas==2.3.3
+altair==6.3.0

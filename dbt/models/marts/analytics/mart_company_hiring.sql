@@ -1,5 +1,5 @@
--- Grain: one row per EMPLOYER (agencies and training providers excluded: agency adverts hide
--- the real employer, so counting them would credit recruiters with demand).
+-- Grain: one row per EMPLOYER. Excluded: agencies and job boards (their adverts hide the real
+-- employer, so counting them would credit middlemen with demand) and training providers.
 select
     co.company_key,
     co.company_name,
@@ -17,4 +17,5 @@ join {{ ref('dim_company') }} co using (company_key)
 where f.is_in_market_scope
   and not co.is_agency
   and not co.is_training_provider
+  and not co.is_job_board
 group by co.company_key, co.company_name

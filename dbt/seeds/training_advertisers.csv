@@ -1,3 +1,5 @@
 advertiser_normalized,evidence
 it career switch,"18 Oct 2026: 123/123 detailed adverts mention course, training and payment; ""guaranteed job offer"" after self-paced programme"
 itol recruit,"18 Oct 2026: 220/220 detailed adverts mention course, training and payment; text: ""Please note this is a training course and fees apply"""
+newto training,"21 Oct 2026: no full descriptions (no detail call yet), but titles carry the course signals: ""Trainee Data Analyst - job guarantee"", ""Data Scientist No experience necessary - job guarantee"""
+qualify nation recruitment,"21 Oct 2026: 156 adverts, all ""Trainee <role> | No experience needed (Ref: ...)"", reused titles across roles, no descriptions. Same pattern as Newto Training. None matched a tracked role yet; listed so a future pattern change cannot let them in."

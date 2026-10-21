@@ -8,8 +8,10 @@ __pycache__/
 venv/
 .pytest_cache/
 
-# pipeline data (raw files are rebuilt by the pipeline, never committed)
-data/
+# pipeline data (raw files are rebuilt by the pipeline, never committed).
+# Leading slash = only the top-level data/ folder. Without it, git would also ignore
+# dashboard/data/, which the public dashboard needs.
+/data/
 
 # editors / OS
 .vscode/

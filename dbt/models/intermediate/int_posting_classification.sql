@@ -33,17 +33,20 @@ select
             then 'senior'
         else 'unspecified'
     end as seniority,
-    (p.source = 'reed'
+    -- coalesce: SQL's NULL logic. "false OR NULL" is NULL, not false, and a NULL flag silently
+    -- drops the row from every filter. Found 21 Oct 2026: 150 UK data-role postings without
+    -- a full description were missing from all marts. No evidence = false, stated explicitly.
+    coalesce(p.source = 'reed'
         or p.country_code = 'GB'
-        or coalesce(p.location_text, '') ~* {{ uk_location_regex() }}) as is_uk,
+        or coalesce(p.location_text, '') ~* {{ uk_location_regex() }}, false) as is_uk,
     case
         when p.source = 'reed' then initcap(trim(p.location_text))
         else initcap(substring(p.location_text from '(?i)(london|manchester|edinburgh|glasgow|bristol|leeds|cardiff|birmingham|cambridge|oxford|belfast|newcastle|nottingham|sheffield|liverpool|reading|brighton)'))
     end as city,
-    (t.advertiser_normalized is not null
+    coalesce(t.advertiser_normalized is not null
         or (p.description_text ~* '(training course|traineeship|self[- ]paced|online course|course fee)'
-            and p.description_text ~* '(fees? apply|money back|job guarantee|guaranteed job|refund|pay(ment)? (plan|options)|finance options)'))
-        as is_training_course,
+            and p.description_text ~* '(fees? apply|money back|job guarantee|guaranteed job|refund|pay(ment)? (plan|options)|finance options)'),
+        false) as is_training_course,
     case
         when t.advertiser_normalized is not null then 'advertiser_list'
         when p.description_text ~* '(training course|traineeship|self[- ]paced|online course|course fee)'

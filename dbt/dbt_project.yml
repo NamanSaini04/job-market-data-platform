@@ -37,3 +37,5 @@ seeds:
       +column_types: {skill: text, category: text, pattern: text}
     training_advertisers:
       +column_types: {advertiser_normalized: text, evidence: text}
+    job_board_intermediaries:
+      +column_types: {advertiser_normalized: text, evidence: text}

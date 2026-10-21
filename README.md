@@ -4,8 +4,10 @@ A daily, automated pipeline that collects UK data and AI job postings from appro
 keeps every raw observation, tracks each posting over time, and models the data with dbt
 on PostgreSQL for analysis of skills, salaries, locations and hiring trends.
 
-> **Status: Phase 4.** Daily collection from 19 company job boards and Reed (UK), modelled with dbt
-> into a star schema and analytics marts. Dashboard is next.
+> **Status: Phase 5.** Daily collection from 19 company job boards and Reed (UK), modelled with dbt
+> into a star schema and analytics marts, published as a public dashboard.
+>
+> **Live dashboard:** _link added after deployment_
 
 ## Architecture (so far)
 
@@ -28,7 +30,10 @@ PostgreSQL (Docker)
   staging       views: rename, cast, parse JSON, HTML -> text
   intermediate  rules: closure, content edits, role, seniority, salary, training-course flag
   marts         dim_date, dim_role, dim_skill, dim_company, fact_job_postings,
-                fact_posting_daily, bridge_job_skills + 5 analytics marts
+                fact_posting_daily, bridge_job_skills + 6 analytics marts
+        |
+        v  export (only after a fully passing dbt build): aggregates only, ~40 KB of CSV
+  dashboard/data/  ->  GitHub  ->  Streamlit Community Cloud (public link)
 ```
 
 ## Key design decisions
@@ -42,6 +47,8 @@ PostgreSQL (Docker)
 - **A missing job is not a closed job.** Closed = missing on 2+ days its board was fully collected.
 - **Flag, don't delete.** 606 paid training-course adverts posing as junior jobs are flagged and kept out of every mart ([details](docs/04_dbt.md)).
 - **Only stated salaries.** No estimates; every salary figure carries its sample size.
+- **Middlemen are not employers.** Recruitment agencies, job boards and training providers are kept out of employer rankings, each with recorded evidence.
+- **Publish aggregates, not listings.** The public page shows counts and percentiles only; a test blocks advert text or links from being exported ([details](docs/05_dashboard.md)).
 
 ## Sources
 | Source | Access | Status |
@@ -57,16 +64,18 @@ pip install -r requirements.txt
 cp .env.example .env              # add Reed key and a Postgres password
 docker compose up -d              # Postgres on localhost:5433
 python -m ingestion.db migrate
-pytest -q                         # 70 tests, incl. integration tests on real Postgres
+pytest -q                         # 94 tests, incl. integration tests on real Postgres
 python -m ingestion.run_ats       # collect all boards
 python -m ingestion.run_reed      # collect Reed
-bash scripts/dbt.sh seed && bash scripts/dbt.sh build   # transform + 47 data tests
+bash scripts/dbt.sh seed && bash scripts/dbt.sh build   # transform + 53 data tests
+python scripts/export_dashboard_data.py && streamlit run dashboard/app.py
 ```
-Full setup, verification queries and scheduling: [docs/02_ingestion.md](docs/02_ingestion.md), [docs/03_reed.md](docs/03_reed.md), [docs/04_dbt.md](docs/04_dbt.md).
+Full setup, verification queries and scheduling: [docs/02_ingestion.md](docs/02_ingestion.md), [docs/03_reed.md](docs/03_reed.md), [docs/04_dbt.md](docs/04_dbt.md), [docs/05_dashboard.md](docs/05_dashboard.md).
 
 ## Project layout
 ```
 config/            boards to collect, role families
+dashboard/         public Streamlit page and the CSVs it reads
 database/migrations/  numbered SQL schema changes
 dbt/               staging, intermediate, marts models; seeds; data tests
 docs/              requirements, findings, phase guides

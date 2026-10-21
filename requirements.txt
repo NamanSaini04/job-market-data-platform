@@ -10,3 +10,8 @@ psycopg[binary]>=3.1
 # Phase 4 (pinned: dbt behaviour changes between versions)
 dbt-core==1.12.6
 dbt-postgres==1.9.1
+
+# Phase 5: dashboard (same pins as dashboard/requirements.txt, which the host installs)
+streamlit==1.66.0
+pandas==2.3.3
+altair==6.3.0

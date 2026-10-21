@@ -45,6 +45,14 @@ models:
           - not_null
           - accepted_values:
               arguments: {values: ['open', 'closed', 'unknown']}
+      # Flags must be true/false, never NULL: a NULL flag silently drops rows from filters
+      # (21 Oct 2026: 150 in-scope postings lost this way).
+      - name: is_uk
+        tests: [not_null]
+      - name: is_training_course
+        tests: [not_null]
+      - name: is_in_market_scope
+        tests: [not_null]
       - name: work_type
         tests:
           - accepted_values:
@@ -86,4 +94,10 @@ models:
   - name: mart_salary_by_role
     columns:
       - name: median_gbp
+        tests: [not_null]
+
+  - name: mart_pipeline_summary
+    description: One row of headline facts and exclusion counts for the dashboard.
+    columns:
+      - name: data_as_of
         tests: [not_null]

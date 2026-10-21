@@ -2,7 +2,7 @@
 # Daily pipeline entry point. Called by launchd (see scripts/launchd/), or by hand:
 #   bash scripts/run_daily.sh
 #
-# Steps: make sure Docker and Postgres are up -> apply migrations -> collect -> dbt build.
+# Steps: Docker + Postgres up -> migrations -> collect -> dbt build -> dashboard export.
 # Everything is logged to data/logs/daily_<date>.log
 
 set -uo pipefail
@@ -44,6 +44,13 @@ reed=$?
 bash scripts/dbt.sh seed
 bash scripts/dbt.sh build
 dbt_status=$?
+
+# 5. Dashboard files (Phase 5). Only after a fully passing build: if a dbt test failed,
+#    the dashboard keeps yesterday's checked numbers instead of today's suspect ones.
+#    Publishing is a separate, manual step (git push): see docs/05_dashboard.md.
+if [ "$dbt_status" -eq 0 ]; then
+  .venv/bin/python scripts/export_dashboard_data.py
+fi
 
 status=$(( ats != 0 || reed != 0 || dbt_status != 0 ))
 

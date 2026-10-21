@@ -171,7 +171,7 @@ FROM raw.job_payload LIMIT 10;
 bash scripts/run_daily.sh && tail -5 data/logs/daily_$(date +%F).log
 ```
 Manual test first. Expect `exit=0` on the last line.
-
+ 
 Install the schedule:
 ```bash
 cp scripts/launchd/com.namansaini.jobmarket.daily.plist ~/Library/LaunchAgents/

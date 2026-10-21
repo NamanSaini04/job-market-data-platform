@@ -23,7 +23,8 @@ Data Analyst,analytics analyst,6
 Data Analyst,reporting analyst,6
 BI Developer,bi developer,7
 BI Developer,business intelligence developer,7
-BI Developer,power bi,7
+BI Developer,power bi.*(developer|engineer|modeller),7
+BI Developer,(developer|engineer).*power bi,7
 Data Architect,data architect,8
 Data Leadership,head of data,9
 Data Leadership,director of data,9

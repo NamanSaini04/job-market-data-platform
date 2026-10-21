@@ -2,8 +2,11 @@
 # To track a new role later, add a block here. No code changes needed.
 #
 # search_terms   -> keywords sent to Reed / Adzuna search
-# title_patterns -> lowercase phrases used to classify a job title into this family
-#                   (first matching family wins, so order matters: specific before general)
+# title_patterns -> lowercase REGULAR EXPRESSIONS matched anywhere in the lowercase title
+#                   (first matching family wins, so order matters: specific before general).
+#                   A plain phrase like "data engineer" works as a simple "contains".
+#                   Same rule in Python (ingestion/roles.py) and dbt. Keep to plain text,
+#                   | ( ) .* ? [ ] so both engines read it the same way.
 
 role_families:
   - name: Analytics Engineer
@@ -38,7 +41,12 @@ role_families:
   # e.g. 90x "Data Science Trainee" from one advertiser).
   - name: BI Developer
     search_terms: ["bi developer"]
-    title_patterns: ["bi developer", "business intelligence developer", "power bi"]
+    # "power bi" only with a developer-type word (21 Oct 2026): the bare tool name matched
+    # "Finance Business Partner (Power BI dashboards)", "Systems Accountant (Power BI)",
+    # "Business Analyst | Power BI". Real titles are tested in tests/test_phase1.py.
+    title_patterns: ["bi developer", "business intelligence developer",
+                     "power bi.*(developer|engineer|modeller)",
+                     "(developer|engineer).*power bi"]
 
   - name: Data Architect
     search_terms: ["data architect"]

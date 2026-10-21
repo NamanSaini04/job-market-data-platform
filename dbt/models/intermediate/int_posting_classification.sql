@@ -1,6 +1,6 @@
 -- Role family, seniority and UK flag per posting.
 --
--- Role family: first matching pattern from config/roles.yaml (via seed role_patterns),
+-- Role family: first matching regex from config/roles.yaml (via seed role_patterns),
 -- lowest priority number wins. NULL = not a tracked data role.
 -- Seniority: keywords in the title. Crude but transparent; "unspecified" when no keyword.
 --
@@ -16,7 +16,7 @@ with roles as (
         p.posting_key, r.role_family, r.priority as role_priority
     from {{ ref('int_postings') }} p
     join {{ ref('role_patterns') }} r
-      on lower(p.job_title) like '%' || r.pattern || '%'
+      on lower(p.job_title) ~ r.pattern          -- regex; same rule as ingestion/roles.py
     order by p.posting_key, r.priority
 )
 

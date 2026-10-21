@@ -23,6 +23,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from scripts.check_sources import ATS_URLS, extract_records  # noqa: E402
+from ingestion.roles import title_matches  # noqa: E402
 
 TIMEOUT = 20
 PAUSE_SECONDS = 1  # be polite: one request per second
@@ -52,7 +53,7 @@ def main() -> int:
                 print(f"{c['company']:<20}{c['ats']:<12}{c['slug']:<18}{r.status_code:<6}{'-':<6}{'-':<10}")
                 continue
             jobs = extract_records(r.json())
-            matches = sum(1 for j in jobs if any(p in title_of(j) for p in patterns))
+            matches = sum(1 for j in jobs if title_matches(title_of(j), patterns))
             print(f"{c['company']:<20}{c['ats']:<12}{c['slug']:<18}{200:<6}{len(jobs):<6}{matches:<10}")
         except Exception as e:
             print(f"{c['company']:<20}{c['ats']:<12}{c['slug']:<18}ERROR {e}")

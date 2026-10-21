@@ -57,7 +57,7 @@ pip install -r requirements.txt
 cp .env.example .env              # add Reed key and a Postgres password
 docker compose up -d              # Postgres on localhost:5433
 python -m ingestion.db migrate
-pytest -q                         # 52 tests, incl. integration tests on real Postgres
+pytest -q                         # 70 tests, incl. integration tests on real Postgres
 python -m ingestion.run_ats       # collect all boards
 python -m ingestion.run_reed      # collect Reed
 bash scripts/dbt.sh seed && bash scripts/dbt.sh build   # transform + 47 data tests

@@ -107,6 +107,24 @@ on days when any board failed **or had not started yet** (14 Oct: Reed not runni
   so the acronym was invisible. Fixed; RAG now appears in 51% of AI Engineer adverts.
   "RAG status" (red/amber/green reporting) is excluded on purpose.
 
+### 3.7 Role patterns are regex (changed 21 Oct 2026)
+Review of the first BI Developer results (47 postings): about 6 were not BI jobs. The
+plain phrase `power bi` matched any title that **mentions the tool**: "Finance Business
+Partner (Power BI dashboards)", "Systems Accountant (Power BI)", "Business Analyst | Power BI".
+Finance partners and accountants are paid on a different scale, so this would also have
+bent the BI salary figures.
+- Fix: patterns in `config/roles.yaml` are now regular expressions. Plain phrases still work
+  as "contains". BI now needs `power bi` **plus** developer / engineer / modeller.
+- One rule, two engines: Python (`ingestion/roles.py`, decides which Reed jobs get a detail
+  call) and dbt (Postgres `~`). Checked: both give the same family for all 11,070 titles.
+- Patterns are limited to syntax both engines read the same way; a test rejects `\b`, `\d`
+  and lookarounds.
+- `tests/test_phase1.py` holds 17 real titles with the family each must get. Putting the
+  bare `power bi` back makes 4 of them fail (checked).
+- Data Leadership (3 -> 76 after "head of data" became a search term): reviewed, nearly
+  all genuine (Chief Data Officer, Head of Data, Director of Data). It also includes
+  analytics managers, so read it as "leads a data or analytics team", not only executives.
+
 ## 4. Performance: a planner misestimate (56s -> 0.8s)
 `int_postings` took 56-73s on 5 days of data and would grow daily. `EXPLAIN ANALYZE`:
 ```
@@ -125,7 +143,7 @@ Nested Loop  (rows=40 estimated)  (actual rows=11070)  ~72s
 |---|---|
 | Schema (YAML) | unique + not_null on every key; accepted_values on status, work_type, seniority; relationships fact -> dims |
 | Singular (`dbt/tests/`) | salary min <= max and 10k-500k; closed needs 2 complete missed days; open = seen on latest complete day; one daily row per posting-day; **every observed posting reaches the fact table**; no training course in scope; skill share <= 100% |
-| Python (`tests/test_dbt_seeds.py`) | seeds match config; role priority order; skill regex valid, never matches an empty string, matches its own name |
+| Python (`tests/test_dbt_seeds.py`, `tests/test_phase1.py`) | seeds match config; role priority order; skill regex valid, never matches an empty string, matches its own name; 17 real titles get the right role family |
 | Freshness | `raw.job_observation.ingested_at`: warn after 30h, error after 54h |
 
 Mutation check done on 18 Oct: closure rule changed to 1 day -> test fails (223 rows);
@@ -155,7 +173,6 @@ select * from marts.mart_skill_demand where role_family = 'All data roles' order
 - **Agency adverts hide the employer**, so they are excluded from company rankings, not
   re-attributed.
 - **Seniority from titles only**: 410 of 666 in-scope postings say no level.
-- **BI Developer and Data Architect** families were added 18 Oct; they have no data yet.
 - **Work type** is unknown for about half of postings: most adverts never state it in a field.
 - 5 days of data: trends are not meaningful yet. The marts are built for when they are.
 

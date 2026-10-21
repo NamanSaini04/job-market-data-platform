@@ -26,6 +26,8 @@ import yaml
 from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from ingestion.roles import title_matches  # noqa: E402
 URL = "https://www.reed.co.uk/api/1.0/search"
 PAUSE = 1.0
 
@@ -76,7 +78,7 @@ def main() -> int:
                 # one page of 100 to measure quality
                 page = search(key, keywords=term, resultsToTake=100).get("results", [])
                 n = len(page) or 1
-                title_ok = sum(any(p in (j.get("jobTitle") or "").lower() for p in all_patterns) for j in page)
+                title_ok = sum(title_matches(j.get("jobTitle"), all_patterns) for j in page)
                 salary = sum(j.get("minimumSalary") is not None for j in page)
                 for j in page:
                     g = days_between(j.get("date"), j.get("expirationDate"))

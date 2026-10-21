@@ -6,10 +6,13 @@ They check two things:
   2. The small helper functions in check_sources.py behave correctly.
 """
 
+import re
 from pathlib import Path
 
+import pytest
 import yaml
 
+from ingestion.roles import all_patterns, classify, title_matches
 from scripts.check_sources import ATS_URLS, extract_records, first_verified_per_ats, trim
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -58,7 +61,7 @@ def test_suspected_training_course_titles_do_not_match_any_role():
     patterns = [p for f in load("roles.yaml")["role_families"] for p in f["title_patterns"]]
     for title in ["Data Science Trainee", "Junior AI Developer", "Trainee AI Programmer",
                   "Entry Level Grad Scheme"]:
-        assert not any(p in title.lower() for p in patterns), title
+        assert not title_matches(title, patterns), title
 
 
 def test_title_patterns_are_lowercase_and_not_empty():
@@ -66,6 +69,41 @@ def test_title_patterns_are_lowercase_and_not_empty():
         assert fam["search_terms"] and fam["title_patterns"], fam["name"]
         for p in fam["title_patterns"]:
             assert p == p.lower(), f"pattern '{p}' must be lowercase"
+
+
+def test_patterns_are_valid_regex():
+    for p in all_patterns(load("roles.yaml")):
+        re.compile(p)
+        assert not re.search(r"\\[bBdDwWsS]|\(\?[=!<]", p), f"'{p}': syntax Postgres reads differently"
+        assert not re.compile(p).search(""), f"'{p}' matches an empty title"
+
+
+# Real titles from Reed, 21 Oct 2026 (BI Developer review). The family a title must get.
+REAL_TITLES = {
+    "Power BI Developer": "BI Developer",
+    "BI Developer - Banking": "BI Developer",
+    "Senior Business Intelligence Developer": "BI Developer",
+    "Power BI & Application Developer - AI": "BI Developer",
+    "Power BI Developer & Data Modeller": "BI Developer",
+    "Power BI & Data Modeller": "BI Developer",
+    "Application Developer - Power BI | React": "BI Developer",
+    "Head of Data Services": "Data Leadership",
+    "Chief Data Officer": "Data Leadership",
+    "Senior Data Engineer (Azure)": "Data Engineer",
+    "Lead Analytics Engineer": "Analytics Engineer",
+    "Senior Data Analyst - Power BI": "Data Analyst",
+    # mention the tool, are not BI developers -> no family
+    "Business Analyst | Power BI | £60,000 + Bonus": None,
+    "Finance Business Partner (Power BI dashboards, Group Reporting)": None,
+    "Finance Business Partner Power BI dashboards, Group Reporting - Morgan McKinley": None,
+    "Systems Accountant (Power BI)": None,
+    "Data Science Trainee": None,
+}
+
+
+@pytest.mark.parametrize("title,family", REAL_TITLES.items())
+def test_real_titles_get_the_right_family(title, family):
+    assert classify(title, load("roles.yaml")) == family
 
 
 def test_no_pattern_belongs_to_two_families():

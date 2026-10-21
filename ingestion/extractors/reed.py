@@ -15,6 +15,7 @@ Phase 1 findings this code is built on:
 import re
 from typing import Any
 
+from ingestion import roles
 from ingestion.extractors.ats import RawRecord, Rejected, SchemaChangedError
 
 API = "https://www.reed.co.uk/api/1.0"
@@ -61,9 +62,9 @@ def parse_detail(job_id: str, data: Any) -> RawRecord:
 
 
 def title_patterns(roles_config: dict) -> list[str]:
-    return [p for fam in roles_config["role_families"] for p in fam["title_patterns"]]
+    return roles.all_patterns(roles_config)
 
 
 def title_matches(title: str, patterns: list[str]) -> bool:
-    t = (title or "").lower()
-    return any(p in t for p in patterns)
+    # regex, same rule as dbt: see ingestion/roles.py
+    return roles.title_matches(title, patterns)

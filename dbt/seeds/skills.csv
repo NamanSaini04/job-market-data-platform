@@ -1,0 +1,59 @@
+skill,category,pattern
+Python,language,python
+SQL,language,sql|t-sql|tsql
+Scala,language,scala
+Java,language,java
+C#,language,c#
+C++,language,c\+\+
+Spark,processing,(py)?spark
+Kafka,processing,kafka
+Pandas,processing,pandas
+NumPy,processing,numpy
+Airflow,orchestration,airflow
+dbt,orchestration,dbt
+Azure Data Factory,orchestration,azure data factory
+Snowflake,data_platform,snowflake
+Databricks,data_platform,databricks
+BigQuery,data_platform,bigquery|big query
+Redshift,data_platform,redshift
+Microsoft Fabric,data_platform,microsoft fabric|ms fabric
+Synapse,data_platform,synapse
+PostgreSQL,database,postgres(ql)?
+MySQL,database,mysql
+SQL Server,database,sql server|mssql
+MongoDB,database,mongo(db)?
+AWS,cloud,aws|amazon web services
+Azure,cloud,azure
+GCP,cloud,gcp|google cloud
+Docker,devops,docker
+Kubernetes,devops,kubernetes|k8s
+Terraform,devops,terraform
+Git,devops,git
+CI/CD,devops,ci ?/ ?cd
+Linux,devops,linux
+Power BI,bi,power ?bi
+Tableau,bi,tableau
+Looker,bi,looker
+Qlik,bi,qlik
+Excel,bi,excel
+Machine Learning,ml,machine learning
+Deep Learning,ml,deep learning
+scikit-learn,ml,scikit-learn|sklearn
+PyTorch,ml,pytorch
+TensorFlow,ml,tensorflow
+Keras,ml,keras
+MLOps,ml,mlops|ml ops
+MLflow,ml,mlflow
+NLP,ml,nlp|natural language processing
+Computer Vision,ml,computer vision
+Statistics,method,statistics|statistical
+A/B Testing,method,a/b test(s|ing)?
+ETL,method,etl|elt
+Data Modelling,method,data model(l)?ing
+Data Warehousing,method,data warehous(e|es|ing)
+Data Governance,method,data governance
+LLMs,genai,llms?|large language models?
+Generative AI,genai,generative ai|gen ?ai
+LangChain,genai,langchain
+RAG,genai,rag(?! (status|rating|report))|retrieval[- ]augmented generation
+Hugging Face,genai,hugging ?face

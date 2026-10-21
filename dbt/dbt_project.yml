@@ -1,0 +1,39 @@
+name: job_market
+version: "1.0.0"
+config-version: 2
+profile: job_market
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+# Layers, each in its own Postgres schema:
+#   staging       views. One per source table. Rename, cast, parse JSON. No business logic.
+#   intermediate  tables. Join sources, apply business rules (roles, closure, salary).
+#   marts         tables. What dashboards and analysts query.
+models:
+  job_market:
+    staging:
+      +materialized: view
+      +schema: staging
+    intermediate:
+      +materialized: table
+      +schema: intermediate
+    marts:
+      +materialized: table
+      +schema: marts
+
+seeds:
+  job_market:
+    +schema: seeds
+    role_patterns:
+      +column_types: {role_family: text, pattern: text, priority: integer}
+    ats_companies:
+      +column_types: {source: text, board: text, company_name: text}
+    skills:
+      +column_types: {skill: text, category: text, pattern: text}
+    training_advertisers:
+      +column_types: {advertiser_normalized: text, evidence: text}

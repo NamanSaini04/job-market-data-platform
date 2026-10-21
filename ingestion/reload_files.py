@@ -90,6 +90,19 @@ def reload(settings: Settings | None = None, only_date: str | None = None, conn=
                                  fetched=agg["fetched"], loaded=agg["loaded"],
                                  rejected=agg["rejected"],
                                  raw_file=str(agg["file"].relative_to(settings.data_dir)))
+    # Rebuild Reed's 'search' summary row (closure logic depends on it).
+    # Limitation: a query that failed WITHOUT saving any page leaves no file, so reload cannot
+    # see it. The reconstructed row is marked as such in error_message.
+    for run_id in touched_runs:
+        row = conn.execute(
+            """SELECT bool_and(status = 'success'), count(*) FROM ops.source_run
+               WHERE run_id = %s AND source = 'reed' AND board LIKE 'search:%%'""",
+            (run_id,)).fetchone()
+        if row[1]:
+            loader.record_source_run(
+                conn, run_id, "reed", "search", status="success" if row[0] else "failed",
+                error="reconstructed by reload_files from saved pages")
+
     for run_id in touched_runs:
         status = conn.execute("SELECT status FROM ops.pipeline_run WHERE run_id=%s",
                               (run_id,)).fetchone()[0]

@@ -1,0 +1,44 @@
+version: 2
+
+models:
+  - name: int_job_versions
+    description: Every content version of every job, all sources, one shape.
+    columns:
+      - name: version_key
+        tests: [unique, not_null]
+
+  - name: int_posting_history
+    description: Lifecycle per posting (first/last seen, closure inputs, content edits).
+    columns:
+      - name: posting_key
+        tests: [unique, not_null]
+      - name: content_edits
+        tests: [not_null]
+
+  - name: int_postings
+    description: One row per posting with latest content and normalised fields.
+    columns:
+      - name: posting_key
+        tests: [unique, not_null]
+      - name: status
+        tests:
+          - not_null
+          - accepted_values:
+              arguments: {values: ['open', 'closed', 'unknown']}
+      - name: posted_by
+        tests:
+          - accepted_values:
+              arguments: {values: ['company_board', 'direct', 'agency', 'unknown']}
+
+  - name: int_posting_classification
+    columns:
+      - name: posting_key
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments: {to: ref('int_postings'), field: posting_key}
+      - name: seniority
+        tests:
+          - accepted_values:
+              arguments: {values: ['junior', 'senior', 'leadership', 'unspecified']}

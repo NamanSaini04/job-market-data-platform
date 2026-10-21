@@ -177,6 +177,8 @@ def test_database_outage_then_reload_restores_reed_search(db, settings):
     assert count(db, "raw.reed_search_hit") == 340
     boards = {b for (b,) in db.execute("SELECT board FROM ops.source_run").fetchall()}
     assert "search:data-engineer:direct" in boards
+    # the summary row closure logic depends on must be rebuilt too
+    assert db.execute("SELECT status FROM ops.source_run WHERE board='search'").fetchone() == ("success",)
 
 
 def test_missing_api_key_fails_clearly(settings):

@@ -1,0 +1,14 @@
+# Connection settings come from the same .env as the Python collectors.
+# Use scripts/dbt.sh, which loads .env before calling dbt. No passwords in this file.
+job_market:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: "{{ env_var('PGHOST', 'localhost') }}"
+      port: "{{ env_var('PGPORT', '5433') | as_number }}"
+      user: "{{ env_var('PGUSER', 'jobs') }}"
+      password: "{{ env_var('PGPASSWORD', '') }}"
+      dbname: "{{ env_var('PGDATABASE', 'jobmarket') }}"
+      schema: analytics
+      threads: 4

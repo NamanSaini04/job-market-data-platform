@@ -15,3 +15,10 @@ data/
 .vscode/
 .idea/
 .DS_Store
+
+# dbt build output
+dbt/target/
+dbt/logs/
+dbt/dbt_packages/
+dbt/.user.yml
+logs/

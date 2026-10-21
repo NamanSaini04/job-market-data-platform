@@ -1,0 +1,34 @@
+role_family,pattern,priority
+Analytics Engineer,analytics engineer,1
+ML Engineer,machine learning engineer,2
+ML Engineer,ml engineer,2
+ML Engineer,mlops,2
+ML Engineer,ml ops,2
+AI Engineer,ai engineer,3
+AI Engineer,llm engineer,3
+AI Engineer,applied ai engineer,3
+AI Engineer,genai engineer,3
+Data Engineer,data engineer,4
+Data Engineer,data platform engineer,4
+Data Engineer,etl developer,4
+Data Scientist,data scientist,5
+Data Scientist,machine learning scientist,5
+Data Scientist,ml scientist,5
+Data Analyst,data analyst,6
+Data Analyst,bi analyst,6
+Data Analyst,business intelligence analyst,6
+Data Analyst,insight analyst,6
+Data Analyst,insights analyst,6
+Data Analyst,analytics analyst,6
+Data Analyst,reporting analyst,6
+BI Developer,bi developer,7
+BI Developer,business intelligence developer,7
+BI Developer,power bi,7
+Data Architect,data architect,8
+Data Leadership,head of data,9
+Data Leadership,director of data,9
+Data Leadership,chief data officer,9
+Data Leadership,data lead,9
+Data Leadership,head of analytics,9
+Data Leadership,analytics manager,9
+Data Leadership,analytics lead,9

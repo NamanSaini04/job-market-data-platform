@@ -133,7 +133,8 @@ def load_board(conn: psycopg.Connection, run_id: UUID, observed: date,
                      (source, board, source_job_id, payload_hash, payload, first_seen_run)
                    VALUES (%s,%s,%s,%s,%s,%s) ON CONFLICT DO NOTHING""",
                 (rec.source, rec.board, rec.source_job_id, h, Jsonb(rec.payload), run_id))
-            stats["new_versions"] += cur.rowcount
+            inserted = cur.rowcount
+            stats["new_versions"] += inserted
             if observe:
                 cur.execute(
                     """INSERT INTO raw.job_observation
@@ -145,7 +146,7 @@ def load_board(conn: psycopg.Connection, run_id: UUID, observed: date,
                 else:
                     stats["duplicate"] += 1   # already seen today (re-run, or another search)
             else:
-                stats["loaded"] += 1
+                stats["loaded"] += inserted       # content-only rows: count real inserts only
             if search_hit:
                 cur.execute(
                     """INSERT INTO raw.reed_search_hit

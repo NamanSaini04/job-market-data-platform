@@ -2,7 +2,7 @@
 # Daily pipeline entry point. Called by launchd (see scripts/launchd/), or by hand:
 #   bash scripts/run_daily.sh
 #
-# Steps: make sure Docker and Postgres are up -> apply migrations -> collect boards.
+# Steps: make sure Docker and Postgres are up -> apply migrations -> collect -> dbt build.
 # Everything is logged to data/logs/daily_<date>.log
 
 set -uo pipefail
@@ -36,7 +36,16 @@ done
 ats=$?
 .venv/bin/python -m ingestion.run_reed
 reed=$?
-status=$(( ats != 0 || reed != 0 ))
 
-echo "=== $(date '+%F %T') end exit=$status (boards=$ats reed=$reed)"
+# 4. Transform (Phase 4). Runs even if a collector failed: the closure rule already
+#    treats failed boards as "unknown", and dashboards should show what we do have.
+#    Seeds are regenerated from config/ first, so config is the one place to edit.
+.venv/bin/python scripts/export_seeds.py
+bash scripts/dbt.sh seed
+bash scripts/dbt.sh build
+dbt_status=$?
+
+status=$(( ats != 0 || reed != 0 || dbt_status != 0 ))
+
+echo "=== $(date '+%F %T') end exit=$status (boards=$ats reed=$reed dbt=$dbt_status)"
 exit $status

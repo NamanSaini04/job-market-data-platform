@@ -4,8 +4,8 @@ A daily, automated pipeline that collects UK data and AI job postings from appro
 keeps every raw observation, tracks each posting over time, and models the data with dbt
 on PostgreSQL for analysis of skills, salaries, locations and hiring trends.
 
-> **Status: Phase 3.** Daily collection from 19 company job boards and Reed (UK) into a PostgreSQL raw layer.
-> dbt models and dashboard are next.
+> **Status: Phase 4.** Daily collection from 19 company job boards and Reed (UK), modelled with dbt
+> into a star schema and analytics marts. Dashboard is next.
 
 ## Architecture (so far)
 
@@ -23,6 +23,12 @@ PostgreSQL (Docker)
   raw.rejected_record   failed validation, kept for inspection
   ops.pipeline_run      run log: status, counts, timing
   ops.source_run        per-board result, so a failed fetch is never read as "jobs closed"
+        |
+        v  dbt (daily, after collection)
+  staging       views: rename, cast, parse JSON, HTML -> text
+  intermediate  rules: closure, content edits, role, seniority, salary, training-course flag
+  marts         dim_date, dim_role, dim_skill, dim_company, fact_job_postings,
+                fact_posting_daily, bridge_job_skills + 5 analytics marts
 ```
 
 ## Key design decisions
@@ -33,6 +39,9 @@ PostgreSQL (Docker)
 - **Failure isolation.** One failing board or bad record never stops the run.
 - **Cheap call to discover, expensive call only when it matters.** Reed detail calls are title-filtered, capped daily, and the queue is derived from database state.
 - **Rate limits: stop, don't push.** A 429 after retries ends Reed calls for the day.
+- **A missing job is not a closed job.** Closed = missing on 2+ days its board was fully collected.
+- **Flag, don't delete.** 606 paid training-course adverts posing as junior jobs are flagged and kept out of every mart ([details](docs/04_dbt.md)).
+- **Only stated salaries.** No estimates; every salary figure carries its sample size.
 
 ## Sources
 | Source | Access | Status |
@@ -48,16 +57,18 @@ pip install -r requirements.txt
 cp .env.example .env              # add Reed key and a Postgres password
 docker compose up -d              # Postgres on localhost:5433
 python -m ingestion.db migrate
-pytest -q                         # 48 tests, incl. integration tests on real Postgres
+pytest -q                         # 52 tests, incl. integration tests on real Postgres
 python -m ingestion.run_ats       # collect all boards
 python -m ingestion.run_reed      # collect Reed
+bash scripts/dbt.sh seed && bash scripts/dbt.sh build   # transform + 47 data tests
 ```
-Full setup, verification queries and scheduling: [docs/02_ingestion.md](docs/02_ingestion.md), [docs/03_reed.md](docs/03_reed.md).
+Full setup, verification queries and scheduling: [docs/02_ingestion.md](docs/02_ingestion.md), [docs/03_reed.md](docs/03_reed.md), [docs/04_dbt.md](docs/04_dbt.md).
 
 ## Project layout
 ```
 config/            boards to collect, role families
 database/migrations/  numbered SQL schema changes
+dbt/               staging, intermediate, marts models; seeds; data tests
 docs/              requirements, findings, phase guides
 ingestion/         collector: extractors, raw files, loader, run log
 scripts/           source profiling, daily runner, launchd schedule

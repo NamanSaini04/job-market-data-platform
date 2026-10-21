@@ -1,0 +1,24 @@
+version: 2
+
+sources:
+  - name: raw
+    description: Append-only raw layer written by the Python collectors (ingestion/).
+    schema: raw
+    tables:
+      - name: job_observation
+        description: One row per job per board per day it was seen.
+        loaded_at_field: ingested_at
+        freshness:                       # `dbt source freshness`: is the collector still running?
+          warn_after: {count: 30, period: hour}
+          error_after: {count: 54, period: hour}
+      - name: job_payload
+        description: Full source JSON, one row per distinct content version.
+      - name: reed_search_hit
+        description: Which Reed search (term x direct/agency) returned each job each day.
+
+  - name: ops
+    schema: ops
+    tables:
+      - name: pipeline_run
+      - name: source_run
+        description: Per-board (or per-Reed-search) result of every run. Drives closure safety.

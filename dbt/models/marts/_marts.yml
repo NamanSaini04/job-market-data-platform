@@ -1,0 +1,89 @@
+version: 2
+
+models:
+  - name: dim_date
+    columns:
+      - name: date_day
+        tests: [unique, not_null]
+
+  - name: dim_role
+    columns:
+      - name: role_key
+        tests: [unique, not_null]
+      - name: role_family
+        tests: [unique, not_null]
+
+  - name: dim_skill
+    columns:
+      - name: skill_key
+        tests: [unique, not_null]
+
+  - name: dim_company
+    columns:
+      - name: company_key
+        tests: [unique, not_null]
+
+  - name: fact_job_postings
+    description: >
+      One row per posting. ALL postings kept; is_in_market_scope = UK, tracked role family,
+      not a paid training course. Every analytics mart filters on it.
+    columns:
+      - name: posting_key
+        tests: [unique, not_null]
+      - name: company_key
+        description: NULL when the source gave no company name.
+        tests:
+          - relationships:
+              arguments: {to: ref('dim_company'), field: company_key}
+      - name: role_key
+        description: NULL when the title matches no tracked role family.
+        tests:
+          - relationships:
+              arguments: {to: ref('dim_role'), field: role_key}
+      - name: status
+        tests:
+          - not_null
+          - accepted_values:
+              arguments: {values: ['open', 'closed', 'unknown']}
+      - name: work_type
+        tests:
+          - accepted_values:
+              arguments: {values: ['hybrid', 'remote', 'on_site', 'unknown']}
+      - name: employment_type
+        tests:
+          - accepted_values:
+              arguments: {values: ['permanent', 'contract', 'temporary', 'part_time', 'internship', 'unknown']}
+
+  - name: fact_posting_daily
+    columns:
+      - name: posting_key
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: ref('fact_job_postings'), field: posting_key}
+      - name: date_day
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: ref('dim_date'), field: date_day}
+
+  - name: bridge_job_skills
+    columns:
+      - name: posting_key
+        tests:
+          - relationships:
+              arguments: {to: ref('fact_job_postings'), field: posting_key}
+      - name: skill_key
+        tests:
+          - relationships:
+              arguments: {to: ref('dim_skill'), field: skill_key}
+
+  - name: mart_role_demand_daily
+    columns:
+      - name: live_postings
+        tests: [not_null]
+
+  - name: mart_salary_by_role
+    columns:
+      - name: median_gbp
+        tests: [not_null]

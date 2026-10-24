@@ -1,7 +1,44 @@
-# Local infrastructure. Phase 2: just the database.
-# Start:  docker compose up -d
-# Stop:   docker compose down          (data is kept in the named volume)
+# Local infrastructure.
+#   Phase 2: the job database (always).
+#   Phase 6: Airflow (profile "airflow"), which runs the daily pipeline.
+#
+# Database only:        docker compose up -d
+# Database + Airflow:   docker compose --profile airflow up -d --build
+# Airflow UI:           http://localhost:8080   (only reachable from this Mac)
+# Stop:                 docker compose --profile airflow down     (data is kept)
 # Wipe:   docker compose down -v       (DELETES ALL DATA - only if you mean it)
+
+x-airflow: &airflow
+  build:
+    context: .
+    dockerfile: airflow/Dockerfile
+  image: jobmarket-airflow:3.3.2
+  profiles: ["airflow"]
+  restart: unless-stopped
+  env_file: .env                       # Reed key and Postgres login for the collectors
+  environment: &airflow-env
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+    AIRFLOW__CORE__DAGS_FOLDER: /opt/project/airflow/dags
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db/airflow
+    AIRFLOW__CORE__EXECUTION_API_SERVER_URL: http://airflow-apiserver:8080/execution/
+    # All Airflow parts sign task tokens with this; it must be the same everywhere.
+    AIRFLOW__API_AUTH__JWT_SECRET: ${AIRFLOW_JWT_SECRET:?Add AIRFLOW_JWT_SECRET to .env (see docs/06_airflow.md)}
+    # No login screen: the UI is bound to 127.0.0.1 below, so only this Mac can open it.
+    AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_ALL_ADMINS: "True"
+    # Collectors and dbt reach the job database by its Docker name, not localhost:5433.
+    PGHOST: db
+    PGPORT: "5432"
+    PROJECT_DIR: /opt/project
+    DBT_LOG_PATH: /tmp/dbt-logs
+  volumes:
+    - ./:/opt/project                  # code, config, and data/ (raw files land on the Mac)
+    - airflow-logs:/opt/airflow/logs
+  depends_on:
+    db:
+      condition: service_healthy
+    airflow-db:
+      condition: service_healthy
 
 services:
   db:
@@ -24,5 +61,73 @@ services:
       timeout: 3s
       retries: 20
 
+  # Airflow's own bookkeeping database, separate from the job data on purpose:
+  # resetting or upgrading Airflow can never touch the job history.
+  airflow-db:
+    image: postgres:16
+    container_name: jobmarket-airflow-db
+    profiles: ["airflow"]
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow      # internal only: no port is published
+      POSTGRES_DB: airflow
+    volumes:
+      - airflow-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U airflow -d airflow"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  airflow-init:
+    <<: *airflow
+    container_name: jobmarket-airflow-init
+    restart: "no"
+    command: ["airflow", "db", "migrate"]
+
+  airflow-apiserver:
+    <<: *airflow
+    container_name: jobmarket-airflow-apiserver
+    command: ["airflow", "api-server"]
+    ports:
+      - "127.0.0.1:8080:8080"          # this Mac only, never the Wi-Fi network
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs http://localhost:8080/api/v2/monitor/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  airflow-scheduler:
+    <<: *airflow
+    container_name: jobmarket-airflow-scheduler
+    command: ["airflow", "scheduler"]   # LocalExecutor: tasks run inside this container
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully
+
+  airflow-dag-processor:
+    <<: *airflow
+    container_name: jobmarket-airflow-dag-processor
+    command: ["airflow", "dag-processor"]
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully
+
+  # One-off commands, e.g. the DAG tests:
+  #   docker compose --profile airflow run --rm airflow-cli pytest airflow/tests -q
+  airflow-cli:
+    <<: *airflow
+    restart: "no"
+    working_dir: /opt/project
+    entrypoint: []
+    command: ["airflow", "version"]
+
 volumes:
   pgdata:
+  airflow-pgdata:
+  airflow-logs:

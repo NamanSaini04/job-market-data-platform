@@ -1,19 +1,20 @@
 company_name,postings_in_scope,open_postings,role_families,role_family_list,senior_postings,tracked_via_company_board
-Faculty,29,28,2,"Data Scientist, ML Engineer",21,True
+Faculty,36,35,2,"Data Scientist, ML Engineer",26,True
+Lendable,12,11,6,"AI Engineer, Analytics Engineer, Data Analyst, Data Engineer, Data Leadership, Data Scientist",3,True
 Monzo,11,11,3,"Analytics Engineer, Data Analyst, Data Scientist",9,True
 Deliveroo,10,9,3,"Analytics Engineer, Data Scientist, ML Engineer",8,True
-Lendable,10,10,6,"AI Engineer, Analytics Engineer, Data Analyst, Data Engineer, Data Leadership, Data Scientist",2,True
-Wayve,9,9,2,"Data Scientist, ML Engineer",7,True
+Wayve,9,8,2,"Data Scientist, ML Engineer",7,True
+Spotify,8,8,3,"Data Engineer, Data Scientist, ML Engineer",5,True
 Intercom,7,6,2,"Data Engineer, Data Scientist",6,True
-Spotify,6,6,3,"Data Engineer, Data Scientist, ML Engineer",5,True
+ElevenLabs,6,4,4,"AI Engineer, Analytics Engineer, Data Engineer, Data Scientist",0,True
 Marshmallow,5,5,2,"Data Leadership, Data Scientist",2,True
 OpenAI,5,4,1,AI Engineer,0,True
-ElevenLabs,4,4,3,"Analytics Engineer, Data Engineer, Data Scientist",0,True
 FDM Group,3,3,2,"AI Engineer, Data Engineer",1,False
 GitLab,3,3,1,AI Engineer,1,True
 hireful.,3,3,1,Data Engineer,3,False
 Norton Rose Fulbright LLP,3,3,3,"AI Engineer, Data Engineer, Data Scientist",0,False
-Specsavers,3,3,1,Data Leadership,0,False
+Specsavers,3,0,1,Data Leadership,0,False
+FRP Group,2,2,2,"Data Engineer, Data Leadership",1,False
 FSP Consulting,2,2,2,"Data Architect, Data Engineer",2,False
 Multiverse,2,1,2,"AI Engineer, Data Leadership",1,True
 NG Bailey,2,1,1,Data Engineer,0,False
@@ -24,7 +25,8 @@ Vbeyond,2,2,2,"Data Engineer, Data Scientist",0,False
 Zopa,2,2,2,"Analytics Engineer, Data Analyst",2,True
 Acorn Insurance,1,1,1,Data Engineer,0,False
 AJ Bell,1,1,1,Data Scientist,1,False
-Atom Bank,1,1,1,Data Scientist,0,False
+AMS Contingent,1,1,1,Data Analyst,0,False
+Atom Bank,1,0,1,Data Scientist,0,False
 BCM Global,1,1,1,Data Analyst,1,False
 Booker Group,1,1,1,Data Leadership,1,False
 British Heart Foundation,1,1,1,Data Engineer,0,False
@@ -41,15 +43,17 @@ Halton Housing,1,1,1,Data Analyst,0,False
 Hastings Insurance Services Limited,1,1,1,Data Scientist,1,False
 Infoplus Technologies UK Limited,1,0,1,Data Engineer,0,False
 Kaplan,1,1,1,Data Architect,0,False
-Liquidline,1,1,1,Data Engineer,0,False
+Liquidline,1,0,1,Data Engineer,0,False
 Lloyds Banking Group,1,1,1,Data Leadership,1,False
-Marshall Wolfe,1,1,1,Data Analyst,1,False
+Marshall Wolfe,1,0,1,Data Analyst,1,False
 Palantir,1,1,1,AI Engineer,0,True
 Pennon Group,1,0,1,Data Analyst,1,False
+Protein Works,1,1,1,Analytics Engineer,0,False
 Sirius Analysis,1,1,1,Data Scientist,0,False
 Sopra Steria,1,1,1,Data Scientist,0,False
-Synthesia,1,1,1,ML Engineer,0,True
+Synthesia,1,0,1,ML Engineer,0,True
 TELUS Digital,1,1,1,Data Analyst,0,False
 The Hyde Group,1,1,1,Data Engineer,0,False
+Vermillion Analytics,1,1,1,Data Leadership,1,False
 WellData Limited,1,0,1,BI Developer,1,False
 West London College,1,1,1,Data Leadership,0,False

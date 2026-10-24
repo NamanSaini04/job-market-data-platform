@@ -9,6 +9,7 @@ set -uo pipefail
 
 # launchd starts jobs with an almost empty PATH, so set it explicitly.
 export PATH="/usr/local/bin:/opt/homebrew/bin:$HOME/.docker/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+DOCKER="${DOCKER:-docker}"           # tests point this at a fake docker
 
 cd "$(dirname "$0")/.." || exit 1
 mkdir -p data/logs
@@ -16,16 +17,25 @@ exec >>"data/logs/daily_$(date +%F).log" 2>&1
 echo "=== $(date '+%F %T') start"
 
 # 1. Docker Desktop running?
-if ! docker info >/dev/null 2>&1; then
+if ! $DOCKER info >/dev/null 2>&1; then
   echo "Docker not running, starting Docker Desktop"
   open -ga Docker
-  for _ in $(seq 1 60); do docker info >/dev/null 2>&1 && break; sleep 5; done
+  for _ in $(seq 1 60); do $DOCKER info >/dev/null 2>&1 && break; sleep 5; done
+fi
+
+# 1b. Phase 6: Airflow schedules the pipeline now. If its scheduler is running, do nothing,
+#     so the pipeline can never run twice in a day (double Reed calls). Override by hand:
+#       FORCE=1 bash scripts/run_daily.sh
+if [ "${FORCE:-0}" != "1" ] && $DOCKER ps --format '{{.Names}}' | grep -qx jobmarket-airflow-scheduler; then
+  echo "Airflow scheduler is running: skipping (it runs the pipeline). FORCE=1 to run anyway."
+  echo "=== $(date '+%F %T') end exit=0 (skipped: Airflow active)"
+  exit 0
 fi
 
 # 2. Database up and healthy? (If not, the collector still saves files: no data lost.)
-docker compose up -d db
+$DOCKER compose up -d db
 for _ in $(seq 1 30); do
-  [ "$(docker inspect -f '{{.State.Health.Status}}' jobmarket-db 2>/dev/null)" = "healthy" ] && break
+  [ "$($DOCKER inspect -f '{{.State.Health.Status}}' jobmarket-db 2>/dev/null)" = "healthy" ] && break
   sleep 2
 done
 

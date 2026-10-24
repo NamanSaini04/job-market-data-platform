@@ -4,16 +4,16 @@ A daily, automated pipeline that collects UK data and AI job postings from appro
 keeps every raw observation, tracks each posting over time, and models the data with dbt
 on PostgreSQL for analysis of skills, salaries, locations and hiring trends.
 
-> **Status: Phase 5.** Daily collection from 19 company job boards and Reed (UK), modelled with dbt
-> into a star schema and analytics marts, published as a public dashboard.
+> **Status: Phase 6.** Daily collection from 19 company job boards and Reed (UK), orchestrated by
+> Airflow, modelled with dbt into a star schema and analytics marts, published as a public dashboard.
 >
-> **Live dashboard:** _link added after deployment_
+> **Live dashboard:** https://job-market-data-platform-jqpk7xwwv9dtgkrmfzxkn7.streamlit.app/
 
 ## Architecture (so far)
 
 ```
 Company job boards (Greenhouse, Lever, Ashby)   Reed API (14 searches, all pages)
-        |  daily, launchd                         |  + detail calls, capped, queue from DB
+        |  daily, Airflow DAG (Docker)            |  + detail calls, capped, queue from DB
         v                                         v
 Python collectors ──> raw JSON files (gzip, immutable)
         |
@@ -44,6 +44,7 @@ PostgreSQL (Docker)
 - **Failure isolation.** One failing board or bad record never stops the run.
 - **Cheap call to discover, expensive call only when it matters.** Reed detail calls are title-filtered, capped daily, and the queue is derived from database state.
 - **Rate limits: stop, don't push.** A 429 after retries ends Reed calls for the day.
+- **Orchestration that stays honest.** Airflow keeps transforming when a collector fails, but the run still ends red; retries differ per step (company boards yes, rate-limited Reed no) ([details](docs/06_airflow.md)).
 - **A missing job is not a closed job.** Closed = missing on 2+ days its board was fully collected.
 - **Flag, don't delete.** 606 paid training-course adverts posing as junior jobs are flagged and kept out of every mart ([details](docs/04_dbt.md)).
 - **Only stated salaries.** No estimates; every salary figure carries its sample size.
@@ -64,16 +65,20 @@ pip install -r requirements.txt
 cp .env.example .env              # add Reed key and a Postgres password
 docker compose up -d              # Postgres on localhost:5433
 python -m ingestion.db migrate
-pytest -q                         # 94 tests, incl. integration tests on real Postgres
+pytest -q                         # 97 tests, incl. integration tests on real Postgres
 python -m ingestion.run_ats       # collect all boards
 python -m ingestion.run_reed      # collect Reed
 bash scripts/dbt.sh seed && bash scripts/dbt.sh build   # transform + 53 data tests
 python scripts/export_dashboard_data.py && streamlit run dashboard/app.py
+
+# or let Airflow run all of it daily (UI on http://localhost:8080):
+docker compose --profile airflow up -d --build
 ```
-Full setup, verification queries and scheduling: [docs/02_ingestion.md](docs/02_ingestion.md), [docs/03_reed.md](docs/03_reed.md), [docs/04_dbt.md](docs/04_dbt.md), [docs/05_dashboard.md](docs/05_dashboard.md).
+Full setup, verification queries and scheduling: [docs/02_ingestion.md](docs/02_ingestion.md), [docs/03_reed.md](docs/03_reed.md), [docs/04_dbt.md](docs/04_dbt.md), [docs/05_dashboard.md](docs/05_dashboard.md), [docs/06_airflow.md](docs/06_airflow.md).
 
 ## Project layout
 ```
+airflow/           DAG, image, DAG tests
 config/            boards to collect, role families
 dashboard/         public Streamlit page and the CSVs it reads
 database/migrations/  numbered SQL schema changes

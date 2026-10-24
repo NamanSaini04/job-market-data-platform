@@ -1,0 +1,4 @@
+# The image only needs airflow/requirements-pipeline.txt. Code and data are MOUNTED at run
+# time, not copied, so keep the build context tiny (data/ grows every day).
+*
+!airflow/requirements-pipeline.txt

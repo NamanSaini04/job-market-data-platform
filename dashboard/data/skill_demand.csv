@@ -1,399 +1,406 @@
 role_family,skill,category,postings_mentioning,postings_with_description,pct_of_postings,is_low_sample
-AI Engineer,LLMs,genai,71,86,82.6,False
-AI Engineer,Python,language,64,86,74.4,False
-AI Engineer,RAG,genai,41,86,47.7,False
-AI Engineer,Generative AI,genai,38,86,44.2,False
-AI Engineer,AWS,cloud,29,86,33.7,False
-AI Engineer,LangChain,genai,28,86,32.6,False
-AI Engineer,Azure,cloud,26,86,30.2,False
-AI Engineer,Machine Learning,ml,25,86,29.1,False
-AI Engineer,CI/CD,devops,24,86,27.9,False
-AI Engineer,SQL,language,16,86,18.6,False
-AI Engineer,MLOps,ml,14,86,16.3,False
-AI Engineer,Docker,devops,13,86,15.1,False
-AI Engineer,GCP,cloud,10,86,11.6,False
-AI Engineer,PyTorch,ml,10,86,11.6,False
-AI Engineer,Kubernetes,devops,9,86,10.5,False
-AI Engineer,NLP,ml,9,86,10.5,False
-AI Engineer,TensorFlow,ml,9,86,10.5,False
-AI Engineer,Java,language,8,86,9.3,False
-AI Engineer,Databricks,data_platform,7,86,8.1,False
-AI Engineer,Git,devops,7,86,8.1,False
-AI Engineer,Hugging Face,genai,7,86,8.1,False
-AI Engineer,Data Modelling,method,5,86,5.8,False
-AI Engineer,C#,language,4,86,4.7,False
-AI Engineer,ETL,method,4,86,4.7,False
-AI Engineer,C++,language,3,86,3.5,False
-AI Engineer,Data Governance,method,3,86,3.5,False
-AI Engineer,Deep Learning,ml,3,86,3.5,False
-AI Engineer,Kafka,processing,3,86,3.5,False
-AI Engineer,PostgreSQL,database,3,86,3.5,False
-AI Engineer,Terraform,devops,3,86,3.5,False
-AI Engineer,Computer Vision,ml,2,86,2.3,False
-AI Engineer,Data Warehousing,method,2,86,2.3,False
-AI Engineer,MLflow,ml,2,86,2.3,False
-AI Engineer,Pandas,processing,2,86,2.3,False
-AI Engineer,scikit-learn,ml,2,86,2.3,False
-AI Engineer,Snowflake,data_platform,2,86,2.3,False
-AI Engineer,Spark,processing,2,86,2.3,False
-AI Engineer,Statistics,method,2,86,2.3,False
-AI Engineer,Airflow,orchestration,1,86,1.2,False
-AI Engineer,Excel,bi,1,86,1.2,False
-AI Engineer,Linux,devops,1,86,1.2,False
-AI Engineer,Power BI,bi,1,86,1.2,False
-AI Engineer,Scala,language,1,86,1.2,False
-AI Engineer,Synapse,data_platform,1,86,1.2,False
-All data roles,SQL,language,582,985,59.1,False
-All data roles,Python,language,579,985,58.8,False
-All data roles,Azure,cloud,294,985,29.8,False
-All data roles,Data Modelling,method,260,985,26.4,False
-All data roles,Machine Learning,ml,245,985,24.9,False
-All data roles,Power BI,bi,241,985,24.5,False
-All data roles,ETL,method,216,985,21.9,False
-All data roles,Databricks,data_platform,205,985,20.8,False
-All data roles,AWS,cloud,200,985,20.3,False
-All data roles,CI/CD,devops,171,985,17.4,False
-All data roles,Snowflake,data_platform,152,985,15.4,False
-All data roles,Data Governance,method,151,985,15.3,False
-All data roles,Data Warehousing,method,147,985,14.9,False
-All data roles,LLMs,genai,126,985,12.8,False
-All data roles,Spark,processing,123,985,12.5,False
-All data roles,Statistics,method,123,985,12.5,False
-All data roles,GCP,cloud,121,985,12.3,False
-All data roles,Microsoft Fabric,data_platform,118,985,12.0,False
-All data roles,dbt,orchestration,93,985,9.4,False
-All data roles,Excel,bi,90,985,9.1,False
-All data roles,Git,devops,83,985,8.4,False
-All data roles,Generative AI,genai,79,985,8.0,False
-All data roles,Tableau,bi,76,985,7.7,False
-All data roles,Kubernetes,devops,72,985,7.3,False
-All data roles,Docker,devops,68,985,6.9,False
-All data roles,Airflow,orchestration,63,985,6.4,False
-All data roles,PyTorch,ml,61,985,6.2,False
-All data roles,Terraform,devops,58,985,5.9,False
-All data roles,RAG,genai,54,985,5.5,False
-All data roles,SQL Server,database,54,985,5.5,False
-All data roles,BigQuery,data_platform,53,985,5.4,False
-All data roles,MLOps,ml,52,985,5.3,False
-All data roles,TensorFlow,ml,49,985,5.0,False
-All data roles,Looker,bi,48,985,4.9,False
-All data roles,Azure Data Factory,orchestration,43,985,4.4,False
-All data roles,Synapse,data_platform,39,985,4.0,False
-All data roles,Kafka,processing,33,985,3.4,False
-All data roles,A/B Testing,method,31,985,3.1,False
-All data roles,NLP,ml,30,985,3.0,False
-All data roles,LangChain,genai,29,985,2.9,False
-All data roles,scikit-learn,ml,29,985,2.9,False
-All data roles,Java,language,27,985,2.7,False
-All data roles,Redshift,data_platform,24,985,2.4,False
-All data roles,Pandas,processing,20,985,2.0,False
-All data roles,Scala,language,17,985,1.7,False
-All data roles,PostgreSQL,database,16,985,1.6,False
-All data roles,Deep Learning,ml,14,985,1.4,False
-All data roles,MLflow,ml,11,985,1.1,False
-All data roles,MySQL,database,11,985,1.1,False
-All data roles,NumPy,processing,11,985,1.1,False
-All data roles,Qlik,bi,10,985,1.0,False
-All data roles,Hugging Face,genai,9,985,0.9,False
-All data roles,Linux,devops,9,985,0.9,False
-All data roles,C#,language,8,985,0.8,False
-All data roles,Computer Vision,ml,8,985,0.8,False
-All data roles,MongoDB,database,6,985,0.6,False
-All data roles,C++,language,4,985,0.4,False
-All data roles,Keras,ml,1,985,0.1,False
-Analytics Engineer,SQL,language,27,30,90.0,False
-Analytics Engineer,Python,language,22,30,73.3,False
-Analytics Engineer,dbt,orchestration,20,30,66.7,False
-Analytics Engineer,BigQuery,data_platform,13,30,43.3,False
-Analytics Engineer,Data Modelling,method,13,30,43.3,False
-Analytics Engineer,Data Warehousing,method,13,30,43.3,False
-Analytics Engineer,Snowflake,data_platform,12,30,40.0,False
-Analytics Engineer,Looker,bi,11,30,36.7,False
-Analytics Engineer,GCP,cloud,8,30,26.7,False
-Analytics Engineer,ETL,method,7,30,23.3,False
-Analytics Engineer,CI/CD,devops,6,30,20.0,False
-Analytics Engineer,Git,devops,6,30,20.0,False
-Analytics Engineer,Airflow,orchestration,5,30,16.7,False
-Analytics Engineer,Machine Learning,ml,4,30,13.3,False
-Analytics Engineer,AWS,cloud,3,30,10.0,False
-Analytics Engineer,Databricks,data_platform,3,30,10.0,False
-Analytics Engineer,LLMs,genai,3,30,10.0,False
-Analytics Engineer,Azure,cloud,2,30,6.7,False
-Analytics Engineer,Data Governance,method,2,30,6.7,False
-Analytics Engineer,Power BI,bi,2,30,6.7,False
-Analytics Engineer,Redshift,data_platform,2,30,6.7,False
-Analytics Engineer,Tableau,bi,2,30,6.7,False
-Analytics Engineer,Docker,devops,1,30,3.3,False
-Analytics Engineer,Kafka,processing,1,30,3.3,False
-Analytics Engineer,Microsoft Fabric,data_platform,1,30,3.3,False
-Analytics Engineer,Spark,processing,1,30,3.3,False
-Analytics Engineer,SQL Server,database,1,30,3.3,False
-Analytics Engineer,Synapse,data_platform,1,30,3.3,False
-Analytics Engineer,Terraform,devops,1,30,3.3,False
-BI Developer,SQL,language,42,46,91.3,False
-BI Developer,Power BI,bi,35,46,76.1,False
-BI Developer,Data Modelling,method,27,46,58.7,False
-BI Developer,Microsoft Fabric,data_platform,19,46,41.3,False
-BI Developer,ETL,method,17,46,37.0,False
-BI Developer,Data Warehousing,method,16,46,34.8,False
-BI Developer,Azure,cloud,14,46,30.4,False
-BI Developer,Python,language,12,46,26.1,False
-BI Developer,SQL Server,database,12,46,26.1,False
-BI Developer,Databricks,data_platform,8,46,17.4,False
-BI Developer,Data Governance,method,6,46,13.0,False
-BI Developer,CI/CD,devops,5,46,10.9,False
-BI Developer,LLMs,genai,4,46,8.7,False
-BI Developer,Qlik,bi,4,46,8.7,False
-BI Developer,Azure Data Factory,orchestration,3,46,6.5,False
-BI Developer,Excel,bi,3,46,6.5,False
-BI Developer,GCP,cloud,3,46,6.5,False
-BI Developer,Tableau,bi,3,46,6.5,False
-BI Developer,AWS,cloud,2,46,4.3,False
-BI Developer,dbt,orchestration,2,46,4.3,False
-BI Developer,Snowflake,data_platform,2,46,4.3,False
-BI Developer,Spark,processing,2,46,4.3,False
-BI Developer,A/B Testing,method,1,46,2.2,False
-BI Developer,BigQuery,data_platform,1,46,2.2,False
-BI Developer,C#,language,1,46,2.2,False
-BI Developer,Git,devops,1,46,2.2,False
-BI Developer,Java,language,1,46,2.2,False
-BI Developer,Linux,devops,1,46,2.2,False
-BI Developer,MongoDB,database,1,46,2.2,False
-BI Developer,Pandas,processing,1,46,2.2,False
-BI Developer,Synapse,data_platform,1,46,2.2,False
-Data Analyst,SQL,language,124,186,66.7,False
-Data Analyst,Power BI,bi,107,186,57.5,False
-Data Analyst,Excel,bi,68,186,36.6,False
-Data Analyst,Python,language,68,186,36.6,False
-Data Analyst,Tableau,bi,44,186,23.7,False
-Data Analyst,Data Modelling,method,36,186,19.4,False
-Data Analyst,Statistics,method,31,186,16.7,False
-Data Analyst,Data Governance,method,28,186,15.1,False
-Data Analyst,Snowflake,data_platform,23,186,12.4,False
-Data Analyst,Databricks,data_platform,21,186,11.3,False
-Data Analyst,Looker,bi,20,186,10.8,False
-Data Analyst,A/B Testing,method,18,186,9.7,False
-Data Analyst,Azure,cloud,16,186,8.6,False
-Data Analyst,Machine Learning,ml,14,186,7.5,False
-Data Analyst,Data Warehousing,method,13,186,7.0,False
-Data Analyst,ETL,method,13,186,7.0,False
-Data Analyst,SQL Server,database,10,186,5.4,False
-Data Analyst,Microsoft Fabric,data_platform,9,186,4.8,False
-Data Analyst,MySQL,database,7,186,3.8,False
-Data Analyst,dbt,orchestration,6,186,3.2,False
-Data Analyst,Qlik,bi,6,186,3.2,False
-Data Analyst,AWS,cloud,5,186,2.7,False
-Data Analyst,GCP,cloud,5,186,2.7,False
-Data Analyst,Generative AI,genai,5,186,2.7,False
-Data Analyst,BigQuery,data_platform,4,186,2.2,False
-Data Analyst,Azure Data Factory,orchestration,3,186,1.6,False
-Data Analyst,Spark,processing,3,186,1.6,False
-Data Analyst,CI/CD,devops,2,186,1.1,False
-Data Analyst,LLMs,genai,2,186,1.1,False
-Data Analyst,Airflow,orchestration,1,186,0.5,False
-Data Analyst,MongoDB,database,1,186,0.5,False
-Data Analyst,NLP,ml,1,186,0.5,False
-Data Analyst,PostgreSQL,database,1,186,0.5,False
-Data Analyst,Redshift,data_platform,1,186,0.5,False
-Data Analyst,Synapse,data_platform,1,186,0.5,False
-Data Architect,Data Governance,method,29,39,74.4,False
-Data Architect,Data Modelling,method,29,39,74.4,False
-Data Architect,Azure,cloud,13,39,33.3,False
-Data Architect,Databricks,data_platform,12,39,30.8,False
-Data Architect,AWS,cloud,10,39,25.6,False
-Data Architect,GCP,cloud,9,39,23.1,False
-Data Architect,Snowflake,data_platform,8,39,20.5,False
-Data Architect,SQL,language,8,39,20.5,False
-Data Architect,Power BI,bi,7,39,17.9,False
-Data Architect,ETL,method,6,39,15.4,False
-Data Architect,Data Warehousing,method,5,39,12.8,False
-Data Architect,Machine Learning,ml,4,39,10.3,False
-Data Architect,Microsoft Fabric,data_platform,4,39,10.3,False
-Data Architect,Python,language,4,39,10.3,False
-Data Architect,CI/CD,devops,3,39,7.7,False
-Data Architect,Generative AI,genai,2,39,5.1,False
-Data Architect,Spark,processing,2,39,5.1,False
-Data Architect,Tableau,bi,2,39,5.1,False
-Data Architect,dbt,orchestration,1,39,2.6,False
-Data Architect,Excel,bi,1,39,2.6,False
-Data Architect,Java,language,1,39,2.6,False
-Data Architect,Kafka,processing,1,39,2.6,False
-Data Architect,Looker,bi,1,39,2.6,False
-Data Architect,MLflow,ml,1,39,2.6,False
-Data Architect,MLOps,ml,1,39,2.6,False
-Data Architect,Pandas,processing,1,39,2.6,False
-Data Architect,PostgreSQL,database,1,39,2.6,False
-Data Architect,SQL Server,database,1,39,2.6,False
-Data Architect,Terraform,devops,1,39,2.6,False
-Data Engineer,SQL,language,237,309,76.7,False
-Data Engineer,Python,language,213,309,68.9,False
-Data Engineer,Azure,cloud,162,309,52.4,False
-Data Engineer,ETL,method,161,309,52.1,False
-Data Engineer,Databricks,data_platform,131,309,42.4,False
-Data Engineer,Data Modelling,method,127,309,41.1,False
-Data Engineer,CI/CD,devops,106,309,34.3,False
-Data Engineer,AWS,cloud,99,309,32.0,False
-Data Engineer,Spark,processing,99,309,32.0,False
-Data Engineer,Data Warehousing,method,86,309,27.8,False
-Data Engineer,Snowflake,data_platform,76,309,24.6,False
-Data Engineer,Microsoft Fabric,data_platform,74,309,23.9,False
-Data Engineer,Git,devops,60,309,19.4,False
-Data Engineer,Data Governance,method,57,309,18.4,False
-Data Engineer,Power BI,bi,51,309,16.5,False
-Data Engineer,GCP,cloud,44,309,14.2,False
-Data Engineer,dbt,orchestration,43,309,13.9,False
-Data Engineer,Terraform,devops,40,309,12.9,False
-Data Engineer,Airflow,orchestration,38,309,12.3,False
-Data Engineer,Azure Data Factory,orchestration,37,309,12.0,False
-Data Engineer,Machine Learning,ml,35,309,11.3,False
-Data Engineer,Synapse,data_platform,34,309,11.0,False
-Data Engineer,Kubernetes,devops,29,309,9.4,False
-Data Engineer,SQL Server,database,28,309,9.1,False
-Data Engineer,BigQuery,data_platform,26,309,8.4,False
-Data Engineer,Kafka,processing,24,309,7.8,False
-Data Engineer,Redshift,data_platform,20,309,6.5,False
-Data Engineer,Docker,devops,19,309,6.1,False
-Data Engineer,Java,language,14,309,4.5,False
-Data Engineer,Scala,language,14,309,4.5,False
-Data Engineer,Generative AI,genai,11,309,3.6,False
-Data Engineer,Tableau,bi,11,309,3.6,False
-Data Engineer,LLMs,genai,10,309,3.2,False
-Data Engineer,PostgreSQL,database,9,309,2.9,False
-Data Engineer,Linux,devops,5,309,1.6,False
-Data Engineer,MongoDB,database,4,309,1.3,False
-Data Engineer,RAG,genai,4,309,1.3,False
-Data Engineer,C#,language,3,309,1.0,False
-Data Engineer,Excel,bi,3,309,1.0,False
-Data Engineer,MySQL,database,3,309,1.0,False
-Data Engineer,NumPy,processing,3,309,1.0,False
-Data Engineer,Pandas,processing,3,309,1.0,False
-Data Engineer,Computer Vision,ml,1,309,0.3,False
-Data Engineer,Looker,bi,1,309,0.3,False
-Data Engineer,MLflow,ml,1,309,0.3,False
-Data Engineer,MLOps,ml,1,309,0.3,False
-Data Engineer,NLP,ml,1,309,0.3,False
-Data Engineer,PyTorch,ml,1,309,0.3,False
-Data Engineer,scikit-learn,ml,1,309,0.3,False
-Data Engineer,Statistics,method,1,309,0.3,False
-Data Engineer,TensorFlow,ml,1,309,0.3,False
-Data Leadership,SQL,language,34,84,40.5,False
-Data Leadership,Python,language,27,84,32.1,False
-Data Leadership,Power BI,bi,25,84,29.8,False
-Data Leadership,Data Governance,method,24,84,28.6,False
-Data Leadership,Azure,cloud,12,84,14.3,False
-Data Leadership,Statistics,method,12,84,14.3,False
-Data Leadership,Data Modelling,method,11,84,13.1,False
-Data Leadership,Machine Learning,ml,10,84,11.9,False
-Data Leadership,Snowflake,data_platform,9,84,10.7,False
-Data Leadership,Databricks,data_platform,7,84,8.3,False
-Data Leadership,AWS,cloud,6,84,7.1,False
-Data Leadership,Data Warehousing,method,6,84,7.1,False
-Data Leadership,ETL,method,6,84,7.1,False
-Data Leadership,Microsoft Fabric,data_platform,6,84,7.1,False
-Data Leadership,Tableau,bi,6,84,7.1,False
-Data Leadership,Looker,bi,5,84,6.0,False
-Data Leadership,BigQuery,data_platform,4,84,4.8,False
-Data Leadership,dbt,orchestration,4,84,4.8,False
-Data Leadership,Excel,bi,4,84,4.8,False
-Data Leadership,Airflow,orchestration,3,84,3.6,False
-Data Leadership,GCP,cloud,3,84,3.6,False
-Data Leadership,Generative AI,genai,3,84,3.6,False
-Data Leadership,LLMs,genai,3,84,3.6,False
-Data Leadership,A/B Testing,method,2,84,2.4,False
-Data Leadership,Spark,processing,2,84,2.4,False
-Data Leadership,Docker,devops,1,84,1.2,False
-Data Leadership,Git,devops,1,84,1.2,False
-Data Leadership,Java,language,1,84,1.2,False
-Data Leadership,LangChain,genai,1,84,1.2,False
-Data Leadership,MLflow,ml,1,84,1.2,False
-Data Leadership,Redshift,data_platform,1,84,1.2,False
-Data Leadership,SQL Server,database,1,84,1.2,False
-Data Leadership,Synapse,data_platform,1,84,1.2,False
-Data Leadership,Terraform,devops,1,84,1.2,False
-Data Scientist,Python,language,108,122,88.5,False
-Data Scientist,SQL,language,89,122,73.0,False
-Data Scientist,Machine Learning,ml,71,122,58.2,False
-Data Scientist,Statistics,method,65,122,53.3,False
-Data Scientist,LLMs,genai,19,122,15.6,False
-Data Scientist,Snowflake,data_platform,19,122,15.6,False
-Data Scientist,Azure,cloud,16,122,13.1,False
-Data Scientist,dbt,orchestration,16,122,13.1,False
-Data Scientist,Power BI,bi,13,122,10.7,False
-Data Scientist,Databricks,data_platform,12,122,9.8,False
-Data Scientist,Data Modelling,method,12,122,9.8,False
-Data Scientist,GCP,cloud,11,122,9.0,False
-Data Scientist,Pandas,processing,11,122,9.0,False
-Data Scientist,AWS,cloud,10,122,8.2,False
-Data Scientist,Generative AI,genai,10,122,8.2,False
-Data Scientist,Looker,bi,10,122,8.2,False
-Data Scientist,NLP,ml,10,122,8.2,False
-Data Scientist,scikit-learn,ml,10,122,8.2,False
-Data Scientist,A/B Testing,method,8,122,6.6,False
-Data Scientist,Excel,bi,8,122,6.6,False
-Data Scientist,PyTorch,ml,8,122,6.6,False
-Data Scientist,Spark,processing,8,122,6.6,False
-Data Scientist,Tableau,bi,8,122,6.6,False
-Data Scientist,Docker,devops,7,122,5.7,False
-Data Scientist,NumPy,processing,7,122,5.7,False
-Data Scientist,Airflow,orchestration,6,122,4.9,False
-Data Scientist,CI/CD,devops,6,122,4.9,False
-Data Scientist,Data Warehousing,method,6,122,4.9,False
-Data Scientist,Deep Learning,ml,6,122,4.9,False
-Data Scientist,Git,devops,6,122,4.9,False
-Data Scientist,MLOps,ml,6,122,4.9,False
-Data Scientist,BigQuery,data_platform,5,122,4.1,False
-Data Scientist,Microsoft Fabric,data_platform,5,122,4.1,False
-Data Scientist,RAG,genai,5,122,4.1,False
-Data Scientist,TensorFlow,ml,4,122,3.3,False
-Data Scientist,Computer Vision,ml,3,122,2.5,False
-Data Scientist,Data Governance,method,2,122,1.6,False
-Data Scientist,ETL,method,2,122,1.6,False
-Data Scientist,Kafka,processing,2,122,1.6,False
-Data Scientist,Kubernetes,devops,2,122,1.6,False
-Data Scientist,PostgreSQL,database,2,122,1.6,False
-Data Scientist,Terraform,devops,2,122,1.6,False
-Data Scientist,Hugging Face,genai,1,122,0.8,False
-Data Scientist,Java,language,1,122,0.8,False
-Data Scientist,Keras,ml,1,122,0.8,False
-Data Scientist,Linux,devops,1,122,0.8,False
-Data Scientist,MySQL,database,1,122,0.8,False
-Data Scientist,Scala,language,1,122,0.8,False
-Data Scientist,SQL Server,database,1,122,0.8,False
-ML Engineer,Machine Learning,ml,82,83,98.8,False
-ML Engineer,Python,language,61,83,73.5,False
-ML Engineer,PyTorch,ml,42,83,50.6,False
-ML Engineer,AWS,cloud,36,83,43.4,False
-ML Engineer,TensorFlow,ml,35,83,42.2,False
-ML Engineer,Azure,cloud,33,83,39.8,False
-ML Engineer,Kubernetes,devops,32,83,38.6,False
-ML Engineer,MLOps,ml,30,83,36.1,False
-ML Engineer,GCP,cloud,28,83,33.7,False
-ML Engineer,Docker,devops,27,83,32.5,False
-ML Engineer,CI/CD,devops,19,83,22.9,False
-ML Engineer,scikit-learn,ml,16,83,19.3,False
-ML Engineer,LLMs,genai,14,83,16.9,False
-ML Engineer,Statistics,method,12,83,14.5,False
-ML Engineer,Generative AI,genai,10,83,12.0,False
-ML Engineer,Terraform,devops,10,83,12.0,False
-ML Engineer,Airflow,orchestration,9,83,10.8,False
-ML Engineer,NLP,ml,9,83,10.8,False
-ML Engineer,MLflow,ml,6,83,7.2,False
-ML Engineer,Deep Learning,ml,5,83,6.0,False
-ML Engineer,SQL,language,5,83,6.0,False
-ML Engineer,Databricks,data_platform,4,83,4.8,False
-ML Engineer,RAG,genai,4,83,4.8,False
-ML Engineer,Spark,processing,4,83,4.8,False
-ML Engineer,A/B Testing,method,2,83,2.4,False
-ML Engineer,Computer Vision,ml,2,83,2.4,False
-ML Engineer,Excel,bi,2,83,2.4,False
-ML Engineer,Git,devops,2,83,2.4,False
-ML Engineer,Kafka,processing,2,83,2.4,False
-ML Engineer,Pandas,processing,2,83,2.4,False
-ML Engineer,C++,language,1,83,1.2,False
-ML Engineer,dbt,orchestration,1,83,1.2,False
-ML Engineer,Hugging Face,genai,1,83,1.2,False
-ML Engineer,Java,language,1,83,1.2,False
-ML Engineer,Linux,devops,1,83,1.2,False
-ML Engineer,NumPy,processing,1,83,1.2,False
-ML Engineer,Scala,language,1,83,1.2,False
-ML Engineer,Snowflake,data_platform,1,83,1.2,False
+AI Engineer,LLMs,genai,80,100,80.0,False
+AI Engineer,Python,language,75,100,75.0,False
+AI Engineer,RAG,genai,50,100,50.0,False
+AI Engineer,Generative AI,genai,46,100,46.0,False
+AI Engineer,Azure,cloud,33,100,33.0,False
+AI Engineer,LangChain,genai,32,100,32.0,False
+AI Engineer,AWS,cloud,31,100,31.0,False
+AI Engineer,Machine Learning,ml,30,100,30.0,False
+AI Engineer,CI/CD,devops,24,100,24.0,False
+AI Engineer,SQL,language,17,100,17.0,False
+AI Engineer,MLOps,ml,16,100,16.0,False
+AI Engineer,Docker,devops,14,100,14.0,False
+AI Engineer,PyTorch,ml,12,100,12.0,False
+AI Engineer,GCP,cloud,11,100,11.0,False
+AI Engineer,Kubernetes,devops,10,100,10.0,False
+AI Engineer,NLP,ml,10,100,10.0,False
+AI Engineer,TensorFlow,ml,10,100,10.0,False
+AI Engineer,Git,devops,9,100,9.0,False
+AI Engineer,Java,language,9,100,9.0,False
+AI Engineer,C#,language,8,100,8.0,False
+AI Engineer,Hugging Face,genai,8,100,8.0,False
+AI Engineer,Databricks,data_platform,7,100,7.0,False
+AI Engineer,Data Modelling,method,6,100,6.0,False
+AI Engineer,Deep Learning,ml,4,100,4.0,False
+AI Engineer,ETL,method,4,100,4.0,False
+AI Engineer,C++,language,3,100,3.0,False
+AI Engineer,Data Governance,method,3,100,3.0,False
+AI Engineer,Kafka,processing,3,100,3.0,False
+AI Engineer,Pandas,processing,3,100,3.0,False
+AI Engineer,PostgreSQL,database,3,100,3.0,False
+AI Engineer,scikit-learn,ml,3,100,3.0,False
+AI Engineer,Statistics,method,3,100,3.0,False
+AI Engineer,Terraform,devops,3,100,3.0,False
+AI Engineer,Computer Vision,ml,2,100,2.0,False
+AI Engineer,Data Warehousing,method,2,100,2.0,False
+AI Engineer,MLflow,ml,2,100,2.0,False
+AI Engineer,Snowflake,data_platform,2,100,2.0,False
+AI Engineer,Spark,processing,2,100,2.0,False
+AI Engineer,Airflow,orchestration,1,100,1.0,False
+AI Engineer,Excel,bi,1,100,1.0,False
+AI Engineer,Linux,devops,1,100,1.0,False
+AI Engineer,Power BI,bi,1,100,1.0,False
+AI Engineer,Scala,language,1,100,1.0,False
+AI Engineer,Synapse,data_platform,1,100,1.0,False
+All data roles,Python,language,645,1107,58.3,False
+All data roles,SQL,language,640,1107,57.8,False
+All data roles,Azure,cloud,322,1107,29.1,False
+All data roles,Data Modelling,method,295,1107,26.6,False
+All data roles,Machine Learning,ml,289,1107,26.1,False
+All data roles,Power BI,bi,275,1107,24.8,False
+All data roles,ETL,method,242,1107,21.9,False
+All data roles,AWS,cloud,228,1107,20.6,False
+All data roles,Databricks,data_platform,216,1107,19.5,False
+All data roles,CI/CD,devops,186,1107,16.8,False
+All data roles,Data Governance,method,168,1107,15.2,False
+All data roles,Snowflake,data_platform,167,1107,15.1,False
+All data roles,Data Warehousing,method,157,1107,14.2,False
+All data roles,LLMs,genai,144,1107,13.0,False
+All data roles,Statistics,method,142,1107,12.8,False
+All data roles,Spark,processing,132,1107,11.9,False
+All data roles,GCP,cloud,126,1107,11.4,False
+All data roles,Microsoft Fabric,data_platform,124,1107,11.2,False
+All data roles,Excel,bi,112,1107,10.1,False
+All data roles,dbt,orchestration,99,1107,8.9,False
+All data roles,Generative AI,genai,92,1107,8.3,False
+All data roles,Git,devops,90,1107,8.1,False
+All data roles,Tableau,bi,86,1107,7.8,False
+All data roles,Kubernetes,devops,80,1107,7.2,False
+All data roles,Docker,devops,77,1107,7.0,False
+All data roles,Airflow,orchestration,68,1107,6.1,False
+All data roles,PyTorch,ml,68,1107,6.1,False
+All data roles,RAG,genai,67,1107,6.1,False
+All data roles,Terraform,devops,63,1107,5.7,False
+All data roles,MLOps,ml,62,1107,5.6,False
+All data roles,SQL Server,database,57,1107,5.1,False
+All data roles,BigQuery,data_platform,54,1107,4.9,False
+All data roles,TensorFlow,ml,52,1107,4.7,False
+All data roles,Looker,bi,50,1107,4.5,False
+All data roles,Azure Data Factory,orchestration,45,1107,4.1,False
+All data roles,Kafka,processing,40,1107,3.6,False
+All data roles,Synapse,data_platform,40,1107,3.6,False
+All data roles,NLP,ml,35,1107,3.2,False
+All data roles,LangChain,genai,34,1107,3.1,False
+All data roles,A/B Testing,method,32,1107,2.9,False
+All data roles,scikit-learn,ml,32,1107,2.9,False
+All data roles,Java,language,30,1107,2.7,False
+All data roles,Redshift,data_platform,25,1107,2.3,False
+All data roles,Pandas,processing,24,1107,2.2,False
+All data roles,PostgreSQL,database,21,1107,1.9,False
+All data roles,Scala,language,18,1107,1.6,False
+All data roles,Deep Learning,ml,17,1107,1.5,False
+All data roles,MLflow,ml,15,1107,1.4,False
+All data roles,NumPy,processing,14,1107,1.3,False
+All data roles,C#,language,13,1107,1.2,False
+All data roles,MySQL,database,11,1107,1.0,False
+All data roles,Computer Vision,ml,10,1107,0.9,False
+All data roles,Hugging Face,genai,10,1107,0.9,False
+All data roles,Qlik,bi,10,1107,0.9,False
+All data roles,Linux,devops,9,1107,0.8,False
+All data roles,MongoDB,database,6,1107,0.5,False
+All data roles,C++,language,5,1107,0.5,False
+All data roles,Keras,ml,1,1107,0.1,False
+Analytics Engineer,SQL,language,29,32,90.6,False
+Analytics Engineer,Python,language,24,32,75.0,False
+Analytics Engineer,dbt,orchestration,21,32,65.6,False
+Analytics Engineer,BigQuery,data_platform,14,32,43.8,False
+Analytics Engineer,Data Modelling,method,14,32,43.8,False
+Analytics Engineer,Data Warehousing,method,14,32,43.8,False
+Analytics Engineer,Snowflake,data_platform,13,32,40.6,False
+Analytics Engineer,Looker,bi,11,32,34.4,False
+Analytics Engineer,GCP,cloud,8,32,25.0,False
+Analytics Engineer,CI/CD,devops,7,32,21.9,False
+Analytics Engineer,ETL,method,7,32,21.9,False
+Analytics Engineer,Git,devops,6,32,18.8,False
+Analytics Engineer,Airflow,orchestration,5,32,15.6,False
+Analytics Engineer,Machine Learning,ml,4,32,12.5,False
+Analytics Engineer,AWS,cloud,3,32,9.4,False
+Analytics Engineer,Databricks,data_platform,3,32,9.4,False
+Analytics Engineer,Data Governance,method,3,32,9.4,False
+Analytics Engineer,LLMs,genai,3,32,9.4,False
+Analytics Engineer,Power BI,bi,3,32,9.4,False
+Analytics Engineer,Tableau,bi,3,32,9.4,False
+Analytics Engineer,Azure,cloud,2,32,6.3,False
+Analytics Engineer,Redshift,data_platform,2,32,6.3,False
+Analytics Engineer,Docker,devops,1,32,3.1,False
+Analytics Engineer,Excel,bi,1,32,3.1,False
+Analytics Engineer,Kafka,processing,1,32,3.1,False
+Analytics Engineer,Microsoft Fabric,data_platform,1,32,3.1,False
+Analytics Engineer,Spark,processing,1,32,3.1,False
+Analytics Engineer,SQL Server,database,1,32,3.1,False
+Analytics Engineer,Synapse,data_platform,1,32,3.1,False
+Analytics Engineer,Terraform,devops,1,32,3.1,False
+BI Developer,SQL,language,44,48,91.7,False
+BI Developer,Power BI,bi,36,48,75.0,False
+BI Developer,Data Modelling,method,28,48,58.3,False
+BI Developer,Microsoft Fabric,data_platform,21,48,43.8,False
+BI Developer,Data Warehousing,method,17,48,35.4,False
+BI Developer,ETL,method,17,48,35.4,False
+BI Developer,Azure,cloud,14,48,29.2,False
+BI Developer,Python,language,14,48,29.2,False
+BI Developer,SQL Server,database,12,48,25.0,False
+BI Developer,Databricks,data_platform,8,48,16.7,False
+BI Developer,Data Governance,method,6,48,12.5,False
+BI Developer,CI/CD,devops,5,48,10.4,False
+BI Developer,LLMs,genai,4,48,8.3,False
+BI Developer,Qlik,bi,4,48,8.3,False
+BI Developer,Azure Data Factory,orchestration,3,48,6.3,False
+BI Developer,Excel,bi,3,48,6.3,False
+BI Developer,GCP,cloud,3,48,6.3,False
+BI Developer,Spark,processing,3,48,6.3,False
+BI Developer,Tableau,bi,3,48,6.3,False
+BI Developer,AWS,cloud,2,48,4.2,False
+BI Developer,dbt,orchestration,2,48,4.2,False
+BI Developer,Snowflake,data_platform,2,48,4.2,False
+BI Developer,A/B Testing,method,1,48,2.1,False
+BI Developer,BigQuery,data_platform,1,48,2.1,False
+BI Developer,C#,language,1,48,2.1,False
+BI Developer,Git,devops,1,48,2.1,False
+BI Developer,Java,language,1,48,2.1,False
+BI Developer,Linux,devops,1,48,2.1,False
+BI Developer,MongoDB,database,1,48,2.1,False
+BI Developer,Pandas,processing,1,48,2.1,False
+BI Developer,Synapse,data_platform,1,48,2.1,False
+Data Analyst,SQL,language,144,219,65.8,False
+Data Analyst,Power BI,bi,131,219,59.8,False
+Data Analyst,Excel,bi,88,219,40.2,False
+Data Analyst,Python,language,76,219,34.7,False
+Data Analyst,Tableau,bi,49,219,22.4,False
+Data Analyst,Data Modelling,method,41,219,18.7,False
+Data Analyst,Data Governance,method,33,219,15.1,False
+Data Analyst,Statistics,method,31,219,14.2,False
+Data Analyst,Snowflake,data_platform,23,219,10.5,False
+Data Analyst,Databricks,data_platform,22,219,10.0,False
+Data Analyst,Looker,bi,21,219,9.6,False
+Data Analyst,A/B Testing,method,18,219,8.2,False
+Data Analyst,Azure,cloud,17,219,7.8,False
+Data Analyst,Data Warehousing,method,14,219,6.4,False
+Data Analyst,Machine Learning,ml,14,219,6.4,False
+Data Analyst,ETL,method,13,219,5.9,False
+Data Analyst,SQL Server,database,11,219,5.0,False
+Data Analyst,Microsoft Fabric,data_platform,10,219,4.6,False
+Data Analyst,MySQL,database,7,219,3.2,False
+Data Analyst,dbt,orchestration,6,219,2.7,False
+Data Analyst,Qlik,bi,6,219,2.7,False
+Data Analyst,AWS,cloud,5,219,2.3,False
+Data Analyst,GCP,cloud,5,219,2.3,False
+Data Analyst,Generative AI,genai,5,219,2.3,False
+Data Analyst,BigQuery,data_platform,4,219,1.8,False
+Data Analyst,Azure Data Factory,orchestration,3,219,1.4,False
+Data Analyst,Spark,processing,3,219,1.4,False
+Data Analyst,CI/CD,devops,2,219,0.9,False
+Data Analyst,LLMs,genai,2,219,0.9,False
+Data Analyst,Airflow,orchestration,1,219,0.5,False
+Data Analyst,MongoDB,database,1,219,0.5,False
+Data Analyst,NLP,ml,1,219,0.5,False
+Data Analyst,PostgreSQL,database,1,219,0.5,False
+Data Analyst,Redshift,data_platform,1,219,0.5,False
+Data Analyst,Synapse,data_platform,1,219,0.5,False
+Data Architect,Data Governance,method,35,48,72.9,False
+Data Architect,Data Modelling,method,34,48,70.8,False
+Data Architect,Azure,cloud,18,48,37.5,False
+Data Architect,Databricks,data_platform,14,48,29.2,False
+Data Architect,AWS,cloud,12,48,25.0,False
+Data Architect,SQL,language,12,48,25.0,False
+Data Architect,Snowflake,data_platform,11,48,22.9,False
+Data Architect,Power BI,bi,10,48,20.8,False
+Data Architect,GCP,cloud,9,48,18.8,False
+Data Architect,ETL,method,7,48,14.6,False
+Data Architect,Data Warehousing,method,6,48,12.5,False
+Data Architect,Microsoft Fabric,data_platform,6,48,12.5,False
+Data Architect,Python,language,6,48,12.5,False
+Data Architect,Machine Learning,ml,4,48,8.3,False
+Data Architect,CI/CD,devops,3,48,6.3,False
+Data Architect,Generative AI,genai,3,48,6.3,False
+Data Architect,Spark,processing,3,48,6.3,False
+Data Architect,dbt,orchestration,2,48,4.2,False
+Data Architect,Kafka,processing,2,48,4.2,False
+Data Architect,PostgreSQL,database,2,48,4.2,False
+Data Architect,Tableau,bi,2,48,4.2,False
+Data Architect,Terraform,devops,2,48,4.2,False
+Data Architect,Excel,bi,1,48,2.1,False
+Data Architect,Java,language,1,48,2.1,False
+Data Architect,Looker,bi,1,48,2.1,False
+Data Architect,MLflow,ml,1,48,2.1,False
+Data Architect,MLOps,ml,1,48,2.1,False
+Data Architect,Pandas,processing,1,48,2.1,False
+Data Architect,Redshift,data_platform,1,48,2.1,False
+Data Architect,SQL Server,database,1,48,2.1,False
+Data Engineer,SQL,language,252,344,73.3,False
+Data Engineer,Python,language,230,344,66.9,False
+Data Engineer,ETL,method,186,344,54.1,False
+Data Engineer,Azure,cloud,172,344,50.0,False
+Data Engineer,Data Modelling,method,147,344,42.7,False
+Data Engineer,Databricks,data_platform,137,344,39.8,False
+Data Engineer,AWS,cloud,116,344,33.7,False
+Data Engineer,CI/CD,devops,115,344,33.4,False
+Data Engineer,Spark,processing,104,344,30.2,False
+Data Engineer,Data Warehousing,method,92,344,26.7,False
+Data Engineer,Snowflake,data_platform,84,344,24.4,False
+Data Engineer,Microsoft Fabric,data_platform,75,344,21.8,False
+Data Engineer,Git,devops,63,344,18.3,False
+Data Engineer,Data Governance,method,62,344,18.0,False
+Data Engineer,Power BI,bi,55,344,16.0,False
+Data Engineer,Machine Learning,ml,53,344,15.4,False
+Data Engineer,dbt,orchestration,47,344,13.7,False
+Data Engineer,GCP,cloud,45,344,13.1,False
+Data Engineer,Terraform,devops,42,344,12.2,False
+Data Engineer,Airflow,orchestration,41,344,11.9,False
+Data Engineer,Azure Data Factory,orchestration,39,344,11.3,False
+Data Engineer,Synapse,data_platform,35,344,10.2,False
+Data Engineer,Kubernetes,devops,32,344,9.3,False
+Data Engineer,SQL Server,database,30,344,8.7,False
+Data Engineer,Kafka,processing,27,344,7.8,False
+Data Engineer,BigQuery,data_platform,26,344,7.6,False
+Data Engineer,Docker,devops,21,344,6.1,False
+Data Engineer,Redshift,data_platform,20,344,5.8,False
+Data Engineer,Java,language,16,344,4.7,False
+Data Engineer,Statistics,method,16,344,4.7,False
+Data Engineer,Scala,language,15,344,4.4,False
+Data Engineer,Tableau,bi,14,344,4.1,False
+Data Engineer,Generative AI,genai,12,344,3.5,False
+Data Engineer,PostgreSQL,database,12,344,3.5,False
+Data Engineer,LLMs,genai,10,344,2.9,False
+Data Engineer,Linux,devops,5,344,1.5,False
+Data Engineer,RAG,genai,5,344,1.5,False
+Data Engineer,C#,language,4,344,1.2,False
+Data Engineer,Excel,bi,4,344,1.2,False
+Data Engineer,MongoDB,database,4,344,1.2,False
+Data Engineer,MySQL,database,3,344,0.9,False
+Data Engineer,NumPy,processing,3,344,0.9,False
+Data Engineer,Pandas,processing,3,344,0.9,False
+Data Engineer,Looker,bi,2,344,0.6,False
+Data Engineer,MLflow,ml,2,344,0.6,False
+Data Engineer,MLOps,ml,2,344,0.6,False
+Data Engineer,A/B Testing,method,1,344,0.3,False
+Data Engineer,C++,language,1,344,0.3,False
+Data Engineer,Computer Vision,ml,1,344,0.3,False
+Data Engineer,NLP,ml,1,344,0.3,False
+Data Engineer,PyTorch,ml,1,344,0.3,False
+Data Engineer,scikit-learn,ml,1,344,0.3,False
+Data Engineer,TensorFlow,ml,1,344,0.3,False
+Data Leadership,SQL,language,39,89,43.8,False
+Data Leadership,Python,language,32,89,36.0,False
+Data Leadership,Power BI,bi,25,89,28.1,False
+Data Leadership,Data Governance,method,24,89,27.0,False
+Data Leadership,Machine Learning,ml,15,89,16.9,False
+Data Leadership,Azure,cloud,12,89,13.5,False
+Data Leadership,Statistics,method,12,89,13.5,False
+Data Leadership,Data Modelling,method,11,89,12.4,False
+Data Leadership,Snowflake,data_platform,10,89,11.2,False
+Data Leadership,AWS,cloud,7,89,7.9,False
+Data Leadership,Databricks,data_platform,7,89,7.9,False
+Data Leadership,LLMs,genai,7,89,7.9,False
+Data Leadership,Data Warehousing,method,6,89,6.7,False
+Data Leadership,ETL,method,6,89,6.7,False
+Data Leadership,Microsoft Fabric,data_platform,6,89,6.7,False
+Data Leadership,Tableau,bi,6,89,6.7,False
+Data Leadership,Looker,bi,5,89,5.6,False
+Data Leadership,BigQuery,data_platform,4,89,4.5,False
+Data Leadership,dbt,orchestration,4,89,4.5,False
+Data Leadership,Excel,bi,4,89,4.5,False
+Data Leadership,Generative AI,genai,4,89,4.5,False
+Data Leadership,Airflow,orchestration,3,89,3.4,False
+Data Leadership,GCP,cloud,3,89,3.4,False
+Data Leadership,A/B Testing,method,2,89,2.2,False
+Data Leadership,Spark,processing,2,89,2.2,False
+Data Leadership,Docker,devops,1,89,1.1,False
+Data Leadership,Git,devops,1,89,1.1,False
+Data Leadership,Java,language,1,89,1.1,False
+Data Leadership,LangChain,genai,1,89,1.1,False
+Data Leadership,MLflow,ml,1,89,1.1,False
+Data Leadership,MLOps,ml,1,89,1.1,False
+Data Leadership,Redshift,data_platform,1,89,1.1,False
+Data Leadership,SQL Server,database,1,89,1.1,False
+Data Leadership,Synapse,data_platform,1,89,1.1,False
+Data Leadership,Terraform,devops,1,89,1.1,False
+Data Scientist,Python,language,119,133,89.5,False
+Data Scientist,SQL,language,96,133,72.2,False
+Data Scientist,Machine Learning,ml,76,133,57.1,False
+Data Scientist,Statistics,method,67,133,50.4,False
+Data Scientist,LLMs,genai,20,133,15.0,False
+Data Scientist,Snowflake,data_platform,20,133,15.0,False
+Data Scientist,Azure,cloud,18,133,13.5,False
+Data Scientist,dbt,orchestration,16,133,12.0,False
+Data Scientist,Pandas,processing,14,133,10.5,False
+Data Scientist,Power BI,bi,14,133,10.5,False
+Data Scientist,Databricks,data_platform,13,133,9.8,False
+Data Scientist,Data Modelling,method,13,133,9.8,False
+Data Scientist,NLP,ml,13,133,9.8,False
+Data Scientist,Generative AI,genai,12,133,9.0,False
+Data Scientist,AWS,cloud,11,133,8.3,False
+Data Scientist,GCP,cloud,11,133,8.3,False
+Data Scientist,scikit-learn,ml,11,133,8.3,False
+Data Scientist,Looker,bi,10,133,7.5,False
+Data Scientist,NumPy,processing,10,133,7.5,False
+Data Scientist,PyTorch,ml,10,133,7.5,False
+Data Scientist,Docker,devops,9,133,6.8,False
+Data Scientist,Tableau,bi,9,133,6.8,False
+Data Scientist,A/B Testing,method,8,133,6.0,False
+Data Scientist,Excel,bi,8,133,6.0,False
+Data Scientist,Spark,processing,8,133,6.0,False
+Data Scientist,MLOps,ml,7,133,5.3,False
+Data Scientist,Airflow,orchestration,6,133,4.5,False
+Data Scientist,CI/CD,devops,6,133,4.5,False
+Data Scientist,Data Warehousing,method,6,133,4.5,False
+Data Scientist,Deep Learning,ml,6,133,4.5,False
+Data Scientist,Git,devops,6,133,4.5,False
+Data Scientist,BigQuery,data_platform,5,133,3.8,False
+Data Scientist,Microsoft Fabric,data_platform,5,133,3.8,False
+Data Scientist,RAG,genai,5,133,3.8,False
+Data Scientist,TensorFlow,ml,4,133,3.0,False
+Data Scientist,Computer Vision,ml,3,133,2.3,False
+Data Scientist,Kafka,processing,3,133,2.3,False
+Data Scientist,Kubernetes,devops,3,133,2.3,False
+Data Scientist,PostgreSQL,database,3,133,2.3,False
+Data Scientist,Data Governance,method,2,133,1.5,False
+Data Scientist,ETL,method,2,133,1.5,False
+Data Scientist,Terraform,devops,2,133,1.5,False
+Data Scientist,Hugging Face,genai,1,133,0.8,False
+Data Scientist,Java,language,1,133,0.8,False
+Data Scientist,Keras,ml,1,133,0.8,False
+Data Scientist,Linux,devops,1,133,0.8,False
+Data Scientist,MySQL,database,1,133,0.8,False
+Data Scientist,Scala,language,1,133,0.8,False
+Data Scientist,SQL Server,database,1,133,0.8,False
+ML Engineer,Machine Learning,ml,93,94,98.9,False
+ML Engineer,Python,language,69,94,73.4,False
+ML Engineer,PyTorch,ml,45,94,47.9,False
+ML Engineer,AWS,cloud,41,94,43.6,False
+ML Engineer,TensorFlow,ml,37,94,39.4,False
+ML Engineer,Azure,cloud,36,94,38.3,False
+ML Engineer,Kubernetes,devops,35,94,37.2,False
+ML Engineer,MLOps,ml,35,94,37.2,False
+ML Engineer,Docker,devops,31,94,33.0,False
+ML Engineer,GCP,cloud,31,94,33.0,False
+ML Engineer,CI/CD,devops,24,94,25.5,False
+ML Engineer,LLMs,genai,18,94,19.1,False
+ML Engineer,scikit-learn,ml,17,94,18.1,False
+ML Engineer,Statistics,method,13,94,13.8,False
+ML Engineer,Terraform,devops,12,94,12.8,False
+ML Engineer,Airflow,orchestration,11,94,11.7,False
+ML Engineer,Generative AI,genai,10,94,10.6,False
+ML Engineer,NLP,ml,10,94,10.6,False
+ML Engineer,MLflow,ml,9,94,9.6,False
+ML Engineer,Deep Learning,ml,7,94,7.4,False
+ML Engineer,RAG,genai,7,94,7.4,False
+ML Engineer,SQL,language,7,94,7.4,False
+ML Engineer,Spark,processing,6,94,6.4,False
+ML Engineer,Databricks,data_platform,5,94,5.3,False
+ML Engineer,Computer Vision,ml,4,94,4.3,False
+ML Engineer,Git,devops,4,94,4.3,False
+ML Engineer,Kafka,processing,4,94,4.3,False
+ML Engineer,A/B Testing,method,2,94,2.1,False
+ML Engineer,Excel,bi,2,94,2.1,False
+ML Engineer,Pandas,processing,2,94,2.1,False
+ML Engineer,Snowflake,data_platform,2,94,2.1,False
+ML Engineer,C++,language,1,94,1.1,False
+ML Engineer,Data Modelling,method,1,94,1.1,False
+ML Engineer,dbt,orchestration,1,94,1.1,False
+ML Engineer,Hugging Face,genai,1,94,1.1,False
+ML Engineer,Java,language,1,94,1.1,False
+ML Engineer,LangChain,genai,1,94,1.1,False
+ML Engineer,Linux,devops,1,94,1.1,False
+ML Engineer,NumPy,processing,1,94,1.1,False
+ML Engineer,Scala,language,1,94,1.1,False

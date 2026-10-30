@@ -16,8 +16,13 @@ Design (docs/06_airflow.md):
   * pipeline_status exists because Airflow marks a run by its LAST tasks. Without it, a run
     where Reed failed but dbt passed would show green. It succeeds only if everything did.
   * Retries: company boards 2x, 15 min apart (network blips pass; loads are idempotent).
-    Reed 0x: its HTTP client already retries, and re-running after a rate-limit block
-    would spend ~130 more calls against an undocumented limit.
+    Reed 2x, 20 min apart, ONLY because a Reed run now resumes (30 Oct 2026): a retry skips
+    searches already done today, makes no calls at all after a 429, and the detail cap is
+    per day. Before that, Reed had 0 retries: a retry would have been a second full sweep.
+  * Laptop sleep (found 25-30 Oct 2026): Airflow killed Reed every day when the Mac slept
+    mid-run, because the scheduler declares a task dead after 5 min without a heartbeat.
+    docker-compose.yml raises that to 3 h, and time limits below allow for a sleep inside a
+    run (they count wall-clock time, sleep included).
   * max_active_runs=1: two runs at once would double the Reed calls and race on the same day.
 
 Paths come from environment variables so the same file runs in Docker and in tests.
@@ -41,7 +46,7 @@ SCHEDULE_TZ = "Asia/Kolkata"           # same wall-clock time launchd used (09:3
 default_args = {
     "owner": "naman",
     "retries": 0,
-    "execution_timeout": timedelta(minutes=30),
+    "execution_timeout": timedelta(hours=2),
 }
 
 with DAG(
@@ -51,7 +56,7 @@ with DAG(
     start_date=pendulum.datetime(2026, 10, 24, tz=SCHEDULE_TZ),
     catchup=False,                     # a laptop asleep for 3 days runs once on waking, not 3x
     max_active_runs=1,
-    dagrun_timeout=timedelta(hours=4),
+    dagrun_timeout=timedelta(hours=12),     # must end before tomorrow's run
     default_args=default_args,
     tags=["job-market"],
     doc_md=__doc__,
@@ -67,15 +72,15 @@ with DAG(
                           retries=2, retry_delay=timedelta(minutes=15))
 
     collect_reed = step("collect_reed", f"{PY} -m ingestion.run_reed",
-                        retries=0, execution_timeout=timedelta(minutes=120))
+                        retries=2, retry_delay=timedelta(minutes=20),
+                        execution_timeout=timedelta(hours=4))
 
     export_seeds = step("export_seeds", f"{PY} scripts/export_seeds.py",
                         trigger_rule="all_done")
 
     dbt_seed = step("dbt_seed", f"{DBT} seed {DBT_ARGS}")
 
-    dbt_build = step("dbt_build", f"{DBT} build {DBT_ARGS}",
-                     execution_timeout=timedelta(minutes=60))
+    dbt_build = step("dbt_build", f"{DBT} build {DBT_ARGS}")
 
     export_dashboard = step("export_dashboard", f"{PY} scripts/export_dashboard_data.py")
 

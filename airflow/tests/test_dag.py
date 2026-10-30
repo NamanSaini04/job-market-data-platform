@@ -74,19 +74,25 @@ def test_run_is_red_if_any_step_failed(dag):
 
 def test_retry_policy(dag):
     assert dag.get_task("collect_boards").retries == 2
-    assert dag.get_task("collect_reed").retries == 0, "no blind retries against Reed's rate limit"
+    # Reed retries are safe only because run_reed resumes (tests/test_reed.py: retry fetches
+    # only failed searches, makes no calls after a 429, detail cap is per day).
+    reed = dag.get_task("collect_reed")
+    assert reed.retries == 2 and reed.retry_delay >= timedelta(minutes=15)
+    assert "--no-resume" not in reed.bash_command, "retries must resume, not re-sweep"
     assert dag.get_task("migrate").retries >= 1
 
 
 def test_every_task_has_a_timeout(dag):
     for t in dag.tasks:
-        assert t.execution_timeout and t.execution_timeout <= timedelta(hours=2), t.task_id
+        assert t.execution_timeout and t.execution_timeout <= timedelta(hours=4), t.task_id
 
 
 def test_schedule_and_concurrency(dag):
     assert dag.catchup is False
     assert dag.max_active_runs == 1
-    assert dag.dagrun_timeout == timedelta(hours=4)
+    assert dag.dagrun_timeout <= timedelta(hours=24), "must end before tomorrow's run"
+    # time limits count wall-clock time INCLUDING laptop sleep: leave room for one
+    assert dag.get_task("collect_reed").execution_timeout >= timedelta(hours=3)
 
 
 def test_dbt_keeps_its_build_files_out_of_the_shared_folder(dag):

@@ -106,8 +106,10 @@ def test_detail_queue_title_filter_cap_and_carry_over(db, settings):
     assert s1["detail"]["loaded"] == 100 and s1["detail"]["remaining"] == 190
     assert api.detail_calls() == 100
 
-    s2 = run_reed.run(settings, fetch=api, conn=db, max_details=100)     # e.g. the next run
+    # a second run TODAY with a daily cap of 200: earlier run's 100 count against it
+    s2 = run_reed.run(settings, fetch=api, conn=db, max_details=200)
     assert s2["detail"]["queue"] == 190                                  # carried over, not restarted
+    assert s2["detail"]["cap_today"] == 100
     assert db.execute("SELECT count(*) FROM raw.job_payload WHERE board='detail'").fetchone()[0] == 200
     titles = db.execute("""SELECT DISTINCT p.payload->>'jobTitle' FROM raw.job_payload p
                            JOIN raw.job_payload d ON d.source_job_id = p.source_job_id
@@ -160,7 +162,8 @@ def test_rerun_is_idempotent_and_ignores_application_count_changes(db, settings)
     for jobs in m.values():
         for j in jobs:
             j["applications"] += 50                       # only the volatile field moves
-    s = run_reed.run(settings, fetch=FakeReed(m), conn=db, max_details=0)
+    # resume=False: really fetch everything again, to prove the LOAD is idempotent
+    s = run_reed.run(settings, fetch=FakeReed(m), conn=db, max_details=0, resume=False)
     assert s["new_observations"] == 0
     assert s["new_or_changed_content"] == 0
     assert count(db, "raw.job_observation") == 340
@@ -194,3 +197,44 @@ def test_migration_003_repairs_doubled_totals_from_before_the_fix(db, settings):
     db.commit()
     assert migrate(db, settings.migrations_dir) == ["003_fix_reed_run_totals.sql"]
     assert db.execute("SELECT records_fetched FROM ops.pipeline_run").fetchone() == (340,)
+
+
+# ---------------- resume after an interrupted run (Phase 6, 30 Oct 2026) ----------------
+# On the laptop, Airflow killed Reed runs half-way when the Mac slept. A retry must finish
+# the day cheaply: only what is missing, never a second full sweep, never after a 429.
+
+def test_retry_fetches_only_the_searches_that_failed(db, settings):
+    m = market()
+    run_reed.run(settings, fetch=FakeReed(m, fail_queries={("data analyst", "agency")}),
+                 conn=db, max_details=0)
+    retry = FakeReed(m)
+    s = run_reed.run(settings, fetch=retry, conn=db, max_details=0)
+    searched = {(p["keywords"], "direct" if "postedByDirectEmployer" in p else "agency")
+                for path, p in retry.calls if path == "/search"}
+    assert searched == {("data analyst", "agency")}                # 1 page, not ~5
+    assert s["status"] == "success" and s["resumed_searches"] == 3
+    # and the day now counts as COMPLETE for the closure rule
+    assert db.execute("""SELECT bool_or(status = 'success') FROM ops.source_run
+                         WHERE board = 'search'""").fetchone() == (True,)
+
+
+def test_no_calls_at_all_if_reed_rate_limited_us_earlier_today(db, settings):
+    run_reed.run(settings, fetch=FakeReed(market(), rate_limit_after=4), conn=db, max_details=100)
+    retry = FakeReed(market())
+    s = run_reed.run(settings, fetch=retry, conn=db, max_details=100)
+    assert retry.calls == []
+    assert s["rate_limited"] and s["status"] != "success"
+
+
+def test_detail_cap_is_per_day_not_per_run(db, settings):
+    api = FakeReed(market())
+    run_reed.run(settings, fetch=api, conn=db, max_details=60)
+    run_reed.run(settings, fetch=api, conn=db, max_details=60)    # same day, e.g. an Airflow retry
+    assert api.detail_calls() == 60
+
+
+def test_no_resume_flag_sweeps_everything_again(db, settings):
+    run_reed.run(settings, fetch=FakeReed(market()), conn=db, max_details=0)
+    again = FakeReed(market())
+    run_reed.run(settings, fetch=again, conn=db, max_details=0, resume=False)
+    assert sum(1 for p, _ in again.calls if p == "/search") == 6     # 3 + 1 + 1 + 1 pages

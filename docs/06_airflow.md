@@ -56,7 +56,7 @@ A single "run everything" task would hide where it failed and force a full re-ru
 |---|---|---|
 | migrate | 3 x 1 min | the database may still be starting after Docker wakes |
 | collect_boards | 2 x 15 min | network blips pass; loads are idempotent, so a re-run adds no duplicates |
-| collect_reed | 0 | its HTTP client already retries 429/5xx; an Airflow re-run after a rate-limit block would spend ~130 more calls against an undocumented limit |
+| collect_reed | 2 x 20 min | safe since 30 Oct because a run resumes: skips searches done today, no calls after a 429 today, per-day detail cap (section 8). Before that: 0, since a retry was a full second sweep |
 | everything else | 0 | dbt failures are data or code problems; retrying does not fix them |
 
 Every task has a timeout, and the whole run has a 4-hour limit.
@@ -136,7 +136,7 @@ Rollback: `docker compose --profile airflow down`, then
 
 ## 6. Known limitations
 - **Two runs on some days** after the laptop sleeps through a whole day (section 3).
-  The Reed detail cap is per run, so that day can use up to 2 x 800 detail calls.
+  Cheap since 30 Oct: the second run resumes, and the Reed detail cap is per day.
 - **Docker must be running.** If Docker Desktop is quit, nothing runs, and nothing alerts.
   Airflow cannot report its own absence; the dashboard's "Data as of" date is the backstop.
 - **No alerting yet.** A red run is visible in the UI, not sent anywhere.
@@ -153,10 +153,48 @@ Rollback: `docker compose --profile airflow down`, then
   - Lesson: reproduce the failing step on its own before changing anything. My first
     "reproduction" added the very condition I suspected, so it proved nothing.
 
+## 8. Incident: Airflow killed Reed every day the laptop slept (25-30 Oct 2026)
+
+**What happened.** After the switch to Airflow, company boards succeeded every day, but Reed
+never finished a run: 1-7 of 14 searches, then nothing. No Reed details for six days.
+
+**How it was found.** Not from the Airflow UI, from the pipeline's own files: raw Reed search
+pages dropped from ~153/day to 4-29/day, and no Reed run summary was written after 24 Oct.
+The Airflow task log then showed the timeline:
+```
+04:21:49  reed run started
+05:35:37  first query done        <- 74 minutes later: the Mac was asleep in between
+05:35:47  Sending SIGTERM         <- 10 s after waking
+```
+Reed itself was healthy (HTTP 200 in 0.45 s).
+
+**Root cause.** Airflow's scheduler declares a task dead if it has not heartbeated for
+`task_instance_heartbeat_timeout` (default 300 s), then kills it. A sleeping Mac freezes
+Docker, so on waking every running task looked dead. Company boards (~30 s) usually finished
+before the Mac slept; Reed (4+ min) did not. launchd never had this problem: nothing
+supervises a launchd job, it simply pauses and resumes.
+
+**Lesson.** Airflow assumes always-on infrastructure. Its safety mechanism killed healthy work
+on a laptop. The data quality design held: Reed's incomplete days were "unknown", not
+"closed", so no job was wrongly closed. The six days of Reed data are lost for good: Reed has
+no date filter, so past days cannot be re-collected.
+
+**Fix, in three layers.**
+1. `AIRFLOW__SCHEDULER__TASK_INSTANCE_HEARTBEAT_TIMEOUT=10800` (3 h): ordinary sleeps pass.
+   Trade-off: a genuinely crashed task is noticed after 3 h, not 5 min. Fine for a daily batch.
+2. Reed resumes. A run reads what earlier runs did today: skips searches already done, makes no
+   calls if Reed returned 429 earlier today, and treats the detail cap as per day. A retry
+   now costs only what is missing, so `collect_reed` gets 2 retries, 20 min apart.
+3. Time limits count wall-clock time, sleep included: Reed 4 h, other steps 2 h, whole run 12 h.
+
+**Tests.** Retry fetches only the failed search; no calls after an earlier 429; detail cap is
+per day; `--no-resume` still sweeps everything; compose keeps the 3 h heartbeat timeout.
+Mutation-checked: disabling the resume or the per-day cap fails 3 tests.
+
 ## 7. Completion criteria
 - [x] DAG integrity tests pass (11)
 - [x] Real DAG run with failing collectors behaves as designed (section 4)
 - [x] Missed-schedule behaviour checked against Airflow's code
 - [x] launchd script cannot double-run while Airflow is active (3 tests)
 - [ ] User: image builds and the stack starts on the Mac
-- [ ] User: DAG runs green 3 days in a row
+- [ ] User: DAG runs green 3 days in a row (restarted 30 Oct after the sleep fix, section 8)

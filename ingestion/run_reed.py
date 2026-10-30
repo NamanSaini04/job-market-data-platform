@@ -19,8 +19,17 @@ the run STOPS calling Reed for the day instead of pushing harder. The run ends
 Closure safety: board 'search' is marked success only if EVERY query finished.
 If any query failed, jobs missing today are "unknown", never "closed".
 
+Resume (added 30 Oct 2026): a run killed half-way (laptop asleep -> Airflow stopped it)
+must be safe AND cheap to retry. So a run first reads what earlier runs already did TODAY:
+  * searches that already succeeded today are skipped, not fetched again
+  * if Reed rate-limited us earlier today, make no calls at all
+  * the detail cap is per DAY: details fetched by earlier runs today count against it
+A retry therefore costs only the missing searches, never a second full sweep.
+--no-resume forces a full sweep (tests, or a manual re-check).
+
 Run:   python -m ingestion.run_reed
        python -m ingestion.run_reed --max-details 50     (small test run)
+       python -m ingestion.run_reed --no-resume          (ignore today's earlier runs)
 Exit:  0 = success, 1 = partial or failed
 """
 
@@ -114,8 +123,23 @@ def detail_queue(conn: psycopg.Connection, observed, patterns: list[str]) -> lis
     return [jid for jid, _ in matching]
 
 
+def progress_today(conn: psycopg.Connection, observed) -> dict:
+    """What earlier Reed runs already achieved today (from ops.source_run)."""
+    rows = conn.execute(
+        """SELECT s.board, s.status, s.error_message, s.records_fetched
+             FROM ops.source_run s JOIN ops.pipeline_run r USING (run_id)
+            WHERE r.pipeline = %s AND r.observed_date = %s AND s.source = 'reed'""",
+        (PIPELINE, observed)).fetchall()
+    return {
+        "searches_done": {b for b, st, _, _ in rows if b.startswith("search:") and st == "success"},
+        "rate_limited": any((e or "").startswith("HTTP 429") for _, _, e, _ in rows),
+        "details_fetched": sum(f or 0 for b, _, _, f in rows if b == "detail"),
+    }
+
+
 def run(settings: Settings | None = None, fetch: Fetch | None = None,
-        conn: psycopg.Connection | None = None, max_details: int | None = None) -> dict:
+        conn: psycopg.Connection | None = None, max_details: int | None = None,
+        resume: bool = True) -> dict:
     settings = settings or get_settings()
     log = setup_logging(settings.data_dir / "logs")
     max_details = settings.reed_max_details if max_details is None else max_details
@@ -142,10 +166,16 @@ def run(settings: Settings | None = None, fetch: Fetch | None = None,
             conn = connect(settings)
         except psycopg.OperationalError as e:
             log.error("database unavailable, saving files only", extra={"error": str(e)[:200]})
+    earlier = {"searches_done": set(), "rate_limited": False, "details_fetched": 0}
     if conn is not None:
+        if resume:
+            earlier = progress_today(conn, observed)       # read BEFORE this run adds rows
         loader.start_run(conn, run_id, PIPELINE, observed, len(queries) + 2)
     else:
         summary["db_available"] = False
+    if earlier["rate_limited"]:
+        summary["rate_limited"] = True                     # respect today's 429: no calls at all
+    summary["resumed_searches"] = len(earlier["searches_done"])
     log.info("reed run started", extra={"run_id": str(run_id), "records": len(queries)})
 
     def log_source(board: str, **kw) -> None:
@@ -164,9 +194,11 @@ def run(settings: Settings | None = None, fetch: Fetch | None = None,
     for term, posted_by in queries:
         board = f"search:{reed.slug(term)}:{posted_by}"
         q = {"board": board, "status": "success", "pages": 0, "fetched": 0, "loaded": 0,
-             "rejected": 0, "total_reported": None, "error": None}
+             "rejected": 0, "total_reported": None, "error": None, "resumed": False}
         t0 = time.monotonic()
-        if summary["rate_limited"]:
+        if board in earlier["searches_done"]:
+            q["resumed"] = True                            # done by an earlier run today
+        elif summary["rate_limited"]:
             q.update(status="failed", error="skipped: Reed rate limit reached earlier")
         else:
             try:
@@ -214,7 +246,8 @@ def run(settings: Settings | None = None, fetch: Fetch | None = None,
                                       "status": q["status"], "records": q["fetched"],
                                       **({"error": q["error"]} if q["error"] else {})})
         summary["queries"].append(q)
-        time.sleep(settings.pause_between_requests_s)
+        if not q["resumed"]:
+            time.sleep(settings.pause_between_requests_s)
 
     search_ok = all(q["status"] == "success" for q in summary["queries"])
     # The row closure logic will check: was the WHOLE search complete today?
@@ -231,7 +264,8 @@ def run(settings: Settings | None = None, fetch: Fetch | None = None,
     else:
         queue = detail_queue(conn, observed, patterns)
         d["queue"] = len(queue)
-        todo = queue[:max_details]
+        d["cap_today"] = max(0, max_details - earlier["details_fetched"])   # the cap is per DAY
+        todo = queue[:d["cap_today"]]
         batch: list[tuple[str, bytes]] = []
         not_found: list[Rejected] = []
 
@@ -331,8 +365,11 @@ def run(settings: Settings | None = None, fetch: Fetch | None = None,
 
 def main() -> int:
     p = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    p.add_argument("--max-details", type=int, help="cap detail calls for this run")
-    s = run(max_details=p.parse_args().max_details)
+    p.add_argument("--max-details", type=int, help="cap detail calls for today")
+    p.add_argument("--no-resume", action="store_true",
+                   help="ignore what earlier runs did today and sweep everything again")
+    a = p.parse_args()
+    s = run(max_details=a.max_details, resume=not a.no_resume)
     if "queries" not in s or not s["queries"]:
         print(f"status={s['status']}  error={s.get('error')}")
         return 1

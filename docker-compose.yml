@@ -24,6 +24,10 @@ x-airflow: &airflow
     AIRFLOW__CORE__EXECUTION_API_SERVER_URL: http://airflow-apiserver:8080/execution/
     # All Airflow parts sign task tokens with this; it must be the same everywhere.
     AIRFLOW__API_AUTH__JWT_SECRET: ${AIRFLOW_JWT_SECRET:?Add AIRFLOW_JWT_SECRET to .env (see docs/06_airflow.md)}
+    # Laptop sleep freezes Docker. On waking, Airflow would declare running tasks dead
+    # (default: no heartbeat for 5 min) and kill them. 3 h lets ordinary sleeps pass; longer
+    # ones are caught by the retry, which resumes (docs/06_airflow.md, section 8).
+    AIRFLOW__SCHEDULER__TASK_INSTANCE_HEARTBEAT_TIMEOUT: "10800"
     # No login screen: the UI is bound to 127.0.0.1 below, so only this Mac can open it.
     AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_ALL_ADMINS: "True"
     # Collectors and dbt reach the job database by its Docker name, not localhost:5433.
